@@ -38,7 +38,7 @@ def main() -> None:
             continue
         if name.startswith(SKIP):
             continue
-        price = it.get("median_price") or it.get("min_price")
+        price = it.get("median_price") or it.get("min_price") or it.get("suggested_price")  # редкие наклейки часто без лотов
         if not price or price <= 0:
             continue
         m = re.search(r"\((Factory New|Minimal Wear|Field-Tested|Well-Worn|Battle-Scarred)\)$", name)
