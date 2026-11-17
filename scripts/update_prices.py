@@ -13,7 +13,7 @@ import requests  # для расшифровки ответа Skinport (br) ну
 WEARS = {"Factory New": 1.6, "Minimal Wear": 1.2, "Field-Tested": 1.0,
          "Well-Worn": 0.8, "Battle-Scarred": 0.7}
 ORDER = ["Field-Tested", "Minimal Wear", "Well-Worn", "Battle-Scarred", "Factory New"]
-SKIP = ("Sticker |", "Patch |", "Sealed Graffiti |", "Graffiti |", "Charm |")
+SKIP = ("Patch |", "Sealed Graffiti |", "Graffiti |", "Charm |")  # наклейки (Sticker |) теперь берём
 FACTOR = float(os.environ.get("PRICE_FACTOR", "1"))  # поправка, если нужно приблизить к ценам Steam
 
 
