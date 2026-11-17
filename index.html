@@ -252,7 +252,7 @@ try{const s=await getJ('skins.json');s.forEach(x=>{if(x.image&&x.name){const k=n
 for(const f of['stickers.json','music_kits.json','agents.json']){try{const a=await getJ(f);EXT[f]=a;a.forEach(x=>{if(x.image&&x.name){const k=norm(x.name.replace('StatTrak™ ',''));if(!AUTO[k])AUTO[k]=x.image}})}catch(e){}}
 let tot=0,sm='';try{const c=await getJ('crates.json');tot=Array.isArray(c)?c.length:0;sm=c&&c[0]?String(c[0].type)+'/'+Object.keys(c[0]).slice(0,6).join(','):'';nc+=addApiCases(c)}catch(e){err.push('кейсы: '+e)}
 try{const g=addGenCases(SK,EXT);gn=g[0];gs=g[1];nc+=gn}catch(e){err.push('генерация: '+e)}
-stat(err.length?'Картинки не загрузились ('+err.join('; ')+'). Нужен интернет.':nc||!tot?'Картинки загружены: скинов '+ns+', кейсов '+nc+(gn?' · Добавлено в игру: скинов '+gs+', кейсов '+gn:''):'Кейсы из API не подошли: записей '+tot+' ('+sm+')'+(window.__apiLast?'; '+window.__apiLast:''));
+stat(err.length?'Картинки не загрузились ('+err.join('; ')+'). Нужен интернет.':nc||!tot?'Картинки загружены: скинов '+ns+', кейсов '+nc+(Object.keys(PRICES).length?' · реальных цен: '+Object.keys(PRICES).length:' · prices.json не найден (цены примерные)')+(gn?' · Добавлено в игру: скинов '+gs+', кейсов '+gn:''):'Кейсы из API не подошли: записей '+tot+' ('+sm+')'+(window.__apiLast?'; '+window.__apiLast:''));
 render();if(!$('mk').hidden)mkRender();if(cur&&!$('open').hidden&&!busy)pickCase(cur.id)}
 async function loadAutoOld(){try{const [s,c]=await Promise.all([fetch(API+'skins.json').then(r=>r.json()),fetch(API+'crates.json').then(r=>r.json())]);
 s.forEach(x=>{const n=(x.name||'').replace('StatTrak™ ','');if(x.image){const k='skin:'+encodeURIComponent(n);if(!AUTO[k])AUTO[k]=x.image}});
