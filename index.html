@@ -209,6 +209,13 @@ const sk=n=>'skin:'+encodeURIComponent(n.replace('StatTrak™ ',''));
 let AUTO={};const API='https://bymykel.github.io/CSGO-API/api/en/';
 const SRC=['https://bymykel.github.io/CSGO-API/api/en/','https://cdn.jsdelivr.net/gh/ByMykel/CSGO-API@main/public/api/en/','https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/'];
 async function getJ(f){let e;for(const b of SRC){try{const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),60000);const r=await fetch(b+f,{signal:ac.signal});clearTimeout(tm);if(r.ok)return await r.json();e=new Error(f+' HTTP '+r.status)}catch(x){e=x}}throw e||new Error(f)}
+/* ====== реальные цены: prices.json из твоего репозитория (его раз в неделю обновляет GitHub Actions) ====== */
+const PK=1; /* множитель реальных цен: 1 = как на рынке, 2 = как раньше PM */
+const GH_REPO=''; /* 'ник/репозиторий' — нужно только если игра не на GitHub Pages */
+let PRICES={};
+function priceSrc(){let r=GH_REPO;if(!r&&/\.github\.io$/.test(location.hostname)){const u=location.hostname.split('.')[0],p=location.pathname.split('/')[1];r=u+'/'+(p&&!/\.html?$/.test(p)?p:u+'.github.io')}return(r?['https://cdn.jsdelivr.net/gh/'+r+'@main/prices.json','https://raw.githubusercontent.com/'+r+'/main/prices.json']:[]).concat(['prices.json'])}
+async function loadPrices(){try{const c=JSON.parse(localStorage.getItem('cs2prices')||'null');if(c&&c.p)PRICES=c.p}catch(e){}
+for(const u of priceSrc()){try{const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),8000);const r=await fetch(u,{signal:ac.signal,cache:'no-cache'});clearTimeout(tm);if(!r.ok)continue;const j=await r.json();if(j&&j.p&&typeof j.p==='object'){PRICES=j.p;try{localStorage.setItem('cs2prices',JSON.stringify(j))}catch(e){}BPM.clear();MK=[];return}}catch(e){}}}
 const stat=t=>{let el=$('ist');if(!el){el=document.createElement('div');el.id='ist';el.className='mu';el.style.cssText='padding:0 16px 8px;max-width:1100px;margin:auto';document.querySelector('header').after(el)}el.textContent=t};
 
 /* ====== все скины CS2 из базы → играбельные кейсы (коллекции, оружие, ножи, перчатки, агенты, музыка) ====== */
@@ -278,7 +285,7 @@ $('db').innerHTML=`<div class="row" style="justify-content:space-between"><span 
 let cnt=1,skipFn=null;
 const SHN={b:79.92,p:15.98,k:3.2,r:.64,g:.26},SH={b:'79.92',p:'15.98',k:'3.20',r:'0.64',g:'0.26'};
 let GSH=false;
-const goldOf=k=>((k.odds||SHN).g||0)>0?((k.gen||k.cu||GSH)?(k.gold||GOLD).map(n=>[n,'g']):[['★ Редкий предмет','g']]):[];
+const goldOf=k=>((k.odds||SHN).g||0)>0?((k.gen||(k.cu&&k.gs)||GSH)?(k.gold||GOLD).map(n=>[n,'g']):[['★ Редкий предмет','g']]):[];
 const goldBtn=(k,fn)=>((k.odds||SHN).g||0)>0&&!(k.gen||k.cu)?`<button class="g" style="grid-column:1/-1" onclick="${fn}">${GSH?'Скрыть золотые предметы':'★ Показать, какие золотые предметы есть'}</button>`:'';
 function chanceTxt(k,r,ind){const arr={b:k.b,p:k.p2,k:k.k,r:k.r,g:k.gold||GOLD}[r],o=k.odds||SHN;const v=r==='g'?(o.g||0)/(ind?Math.max(arr.length,1):1):(o[r]||0)/Math.max(arr.length,1);return (v>=1?v.toFixed(2):v.toFixed(3))+'%'}
 function caseDetail(id,keep){const k=CASES.find(x=>x.id===id);if(!k)return;if(!keep)GSH=false;const all=[...k.b.map(n=>[n,'b']),...k.p2.map(n=>[n,'p']),...k.k.map(n=>[n,'k']),...k.r.map(n=>[n,'r']),...goldOf(k)];
@@ -323,7 +330,7 @@ c5d:'<path d="M54 39L37 60h11l-4 17 19-25H52z" fill="#ffd54a" stroke="#8a5200" s
 hyd:'<path d="M36 70q0-14 14-14t14 14M50 56V46" fill="none" stroke="#ff7b6b" stroke-width="4" stroke-linecap="round"/><circle cx="36" cy="66" r="6" fill="#ff7b6b"/><circle cx="64" cy="66" r="6" fill="#ff7b6b"/><circle cx="50" cy="45" r="7" fill="#ff7b6b"/><circle cx="52" cy="44" r="1.6" fill="#220"/>'};
 return `<svg viewBox="0 0 100 90" height="${h||84}" style="filter:drop-shadow(0 6px 12px ${c}77)"><defs><linearGradient id="gc${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity=".6"/><stop offset="1" stop-color="#0a0d14"/></linearGradient></defs><rect x="10" y="32" width="80" height="50" rx="6" fill="url(#gc${i})" stroke="${c}" stroke-width="2.5"/><rect x="6" y="18" width="88" height="19" rx="5" fill="${c}"/><rect x="6" y="18" width="88" height="7" rx="4" fill="#fff" opacity=".22"/><rect x="21" y="18" width="7" height="64" fill="#0a0d14" opacity=".4"/><rect x="72" y="18" width="7" height="64" fill="#0a0d14" opacity=".4"/>${E[i]||KE[k.cat]||'<rect x="37" y="48" width="26" height="14" rx="3" fill="#ddd" opacity=".85"/>'}</svg>`}
 function hash(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h/4294967295}
-function basePrice(n,r,k){const cs=CSK.get(n);if(cs)return cs.p;if(k&&k.cu&&!inMk){if(!MK.length)mkBuild();const q=BPM.get(n);if(q!==undefined)return q}const[a,b]=RANGE[r];return PM*(a+(b-a)*hash(n))*(k.gm||1)}
+function basePrice(n,r,k){const cs=CSK.get(n);if(cs)return cs.p;const lp=PRICES[norm(n)];if(lp>0)return lp*PK;if(k&&k.cu&&!inMk){if(!MK.length)mkBuild();const q=BPM.get(n);if(q!==undefined)return q}const[a,b]=RANGE[r];return PM*(a+(b-a)*hash(n))*(k.gm||1)}
 function pick(k){const o=k.odds||SHN;let x=Math.random()*100,r='b',a=0;for(const q of['g','r','k','p','b']){a+=o[q]||0;if(x<a){r=q;break}}
 const pool=r==='g'?(k.gold||GOLD):r==='b'?k.b:r==='p'?k.p2:r==='k'?k.k:k.r;
 const n=pool[Math.random()*pool.length|0],nk=NWT.includes(k.cat)||!!(CSK.get(n)&&CSK.get(n).nw),w=nk?0:(f=>f<.07?0:f<.15?1:f<.38?2:f<.45?3:4)(Math.random());
@@ -432,13 +439,13 @@ function autoOdds(has){const W={b:79.92,p:15.98,k:3.2,r:.64,g:.26},o={b:0,p:0,k:
 function normOdds(man,has){const v={};let sm=0;RN.forEach(q=>{v[q]=has[q]?Math.max(0,+man[q]||0):0;sm+=v[q]});if(sm<=0)return autoOdds(has);const o={b:0,p:0,k:0,r:0,g:0};let tot=0,mx=null;RN.forEach(q=>{if(v[q]>0){o[q]=+(v[q]*100/sm).toFixed(2);tot+=o[q];if(mx===null||o[q]>o[mx])mx=q}});o[mx]=+(o[mx]+100-tot).toFixed(2);return o}
 /* сборка кейса из описания редактора */
 function cuItems(c){const out=[],seen=new Set();(c.items||[]).forEach(it=>{let x=null;if(it.s){const s=G.cu.s.find(y=>y.id===it.s);if(s)x={n:s.n,r:s.r}}else if(it.n&&RC[it.r])x={n:it.n,r:it.r};if(x&&!seen.has(x.n)){seen.add(x.n);out.push(x)}});return out}
-function cuBuild(c){const it=cuItems(c);if(!it.length)return null;const k={id:c.id,cu:1,cat:'own',n:c.n,c:okColor(c.c),p:+c.p||0,b:[],p2:[],k:[],r:[],gold:[]};it.forEach(x=>{(x.r==='g'?k.gold:x.r==='b'?k.b:x.r==='p'?k.p2:x.r==='k'?k.k:k.r).push(x.n)});const has={b:k.b.length>0,p:k.p2.length>0,k:k.k.length>0,r:k.r.length>0,g:k.gold.length>0};k.odds=c.mode==='man'?normOdds(c.odds||{},has):autoOdds(has);return k}
+function cuBuild(c){const it=cuItems(c);if(!it.length)return null;const k={id:c.id,cu:1,gs:c.gs?1:0,cat:'own',n:c.n,c:okColor(c.c),p:+c.p||0,b:[],p2:[],k:[],r:[],gold:[]};it.forEach(x=>{(x.r==='g'?k.gold:x.r==='b'?k.b:x.r==='p'?k.p2:x.r==='k'?k.k:k.r).push(x.n)});const has={b:k.b.length>0,p:k.p2.length>0,k:k.k.length>0,r:k.r.length>0,g:k.gold.length>0};k.odds=c.mode==='man'?normOdds(c.odds||{},has):autoOdds(has);return k}
 function cuSync(){cuInit();for(let i=CASES.length-1;i>=0;i--)if(CASES[i].cu)CASES.splice(i,1);CSK.clear();G.cu.s.forEach(s=>CSK.set(s.n,s));G.cu.c.forEach(c=>{const k=cuBuild(c);if(k)CASES.push(k)});MK=[];const m=$('mkc');if(m)m.innerHTML=''}
 function evCase(k){const o=k.odds;let ev=0;[['b',k.b],['p',k.p2],['k',k.k],['r',k.r],['g',k.gold]].forEach(([q,a])=>{if(!a.length||!o[q])return;const avg=a.reduce((s,n)=>{const c=CSK.get(n),p=basePrice(n,q,k);return s+(c&&c.nw?p:p*(q==='g'?WAVG:WAVG*1.05))},0)/a.length;ev+=o[q]/100*avg});return ev}
 const prRange=(n,r,k)=>{const c=CSK.get(n),p=basePrice(n,r,k);return c&&c.nw?fm(p):fm(p*.7)+' – '+fm(p*1.6)};
 /* состояние формы */
 const newSk=()=>({id:'',n:'',r:'b',p:'',nw:0,img:'',rm:0,key:''});
-const newCs=()=>({id:'',n:'',p:'',c:'#4fc3f7',items:[],mode:'auto',odds:{},img:'',rm:0});
+const newCs=()=>({id:'',n:'',p:'',c:'#4fc3f7',items:[],mode:'auto',odds:{},img:'',rm:0,gs:0});
 let ED={tab:'s',sk:newSk(),cs:newCs(),q:'',rf:'',pq:'',pr:'',src:'my',pl:[]},edT=0;
 function edMsg(t,ok){const e=$('edErr');if(!e)return;e.className='ederr'+(ok?' edok':'');e.innerHTML=Array.isArray(t)?t.map(x=>'<div>'+x+'</div>').join(''):t;clearTimeout(edT);if(ok)edT=setTimeout(()=>{const x=$('edErr');if(x)x.innerHTML=''},2600)}
 function edTab(t){ED.tab=t;edRender()}
@@ -488,6 +495,7 @@ function edCsHTML(){const f=ED.cs,ed=!!f.id;return `<div class="edg"><div class=
 <div class="edimg" id="edPv" ${edDz}>${edPvHTML()}</div>${edImgBtns(f)}
 <label class="fl">Название</label><input class="fi" maxlength="50" value="${esc(f.n)}" placeholder="Мой кейс" oninput="ED.cs.n=this.value">
 <div class="edr2"><div><label class="fl">Цена, $</label><input class="fi" type="number" min="0.01" step="0.01" value="${esc(f.p)}" placeholder="0.00" oninput="ED.cs.p=this.value;edInfo()"></div><div><label class="fl">Цвет</label><input class="fi edcol" type="color" value="${okColor(f.c)}" oninput="ED.cs.c=this.value;edPvRefresh()"></div></div>
+<label class="fl" style="display:flex;gap:8px;align-items:center;cursor:pointer;margin-top:10px"><input type="checkbox" ${f.gs?'checked':''} onchange="ED.cs.gs=this.checked?1:0"> Показывать ножи и перчатки в составе кейса</label><div class="mu">Если выключено, игрок видит только «★ Редкий предмет».</div>
 <div class="ederr" id="edErr"></div><div class="row" style="margin:10px 0 0"><button onclick="edCsSave()">${ed?'Сохранить':'Создать кейс'}</button></div></div>
 <div class="edcol2"><div class="upp"><b>Содержимое кейса</b><div id="edSel" style="margin-top:8px"></div>
 <div class="row" style="margin:12px 0 6px"><button class="chip ${ED.src==='my'?'on':''}" onclick="edSrc('my')">Мои скины</button><button class="chip ${ED.src==='db'?'on':''}" onclick="edSrc('db')">Из базы игры</button><input id="edPq" placeholder="Поиск" value="${esc(ED.pq)}" oninput="ED.pq=this.value;ED.pn=0;edPickRender()" style="width:130px"><select id="edPr" onchange="ED.pr=this.value;ED.pn=0;edPickRender()"><option value="">Все редкости</option>${RN.map(q=>`<option value="${q}" ${ED.pr===q?'selected':''}>${RC[q][1]}</option>`).join('')}</select></div>
@@ -514,7 +522,7 @@ if(f.mode==='man'){const has={};edItems(f).forEach(x=>has[x.r]=1);let s=0;RN.for
 if(+f.p>0){const ev=evCase(k);h+=`<div style="margin-top:4px">Средний дроп ≈ ${fm(ev)} · возврат ≈ ${(ev/+f.p*100).toFixed(0)}% от цены кейса</div>`}
 el.innerHTML=h}
 function edCsReset(){ED.cs=newCs();edRender()}
-function edCsEdit(id){const c=G.cu.c.find(x=>x.id===id);if(!c)return;ED.tab='c';ED.cs={id,n:c.n,p:c.p,c:okColor(c.c),items:c.items.map(x=>({...x})),mode:c.mode==='man'?'man':'auto',odds:{...(c.odds||{})},img:'',rm:0};edRender();window.scrollTo({top:0,behavior:'smooth'})}
+function edCsEdit(id){const c=G.cu.c.find(x=>x.id===id);if(!c)return;ED.tab='c';ED.cs={id,n:c.n,p:c.p,c:okColor(c.c),items:c.items.map(x=>({...x})),mode:c.mode==='man'?'man':'auto',odds:{...(c.odds||{})},img:'',rm:0,gs:c.gs?1:0};edRender();window.scrollTo({top:0,behavior:'smooth'})}
 function edCsSave(){const f=ED.cs,n=cleanName(f.n,50),p=+f.p,err=[];cuInit();const it=edItems(f);
 if(!n)err.push('Введи название');else if(G.cu.c.some(x=>x.id!==f.id&&norm(x.n)===norm(n))||CASES.some(k=>!k.cu&&norm(k.n)===norm(n)))err.push('Кейс с таким названием уже есть');
 if(!(p>=.01&&p<=1e5))err.push('Цена кейса: от $0.01 до $100000');if(!it.length)err.push('Добавь хотя бы один предмет');
@@ -522,7 +530,7 @@ if(f.mode==='man'&&it.length){const has={};it.forEach(x=>has[x.r]=1);let s=0;RN.
 if(!f.id&&G.cu.c.length>=MAXC)err.push('Достигнут лимит кейсов');
 if(err.length){edMsg(err);return}
 const odds={};RN.forEach(q=>{if(f.odds[q]!==undefined&&f.odds[q]!=='')odds[q]=Math.max(0,+f.odds[q]||0)});
-const d={n,p:+p.toFixed(2),c:okColor(f.c),items:f.items.filter(x=>x.s?G.cu.s.some(y=>y.id===x.s):true).map(x=>x.s?{s:x.s}:{n:x.n,r:x.r}),mode:f.mode,odds};
+const d={n,p:+p.toFixed(2),c:okColor(f.c),items:f.items.filter(x=>x.s?G.cu.s.some(y=>y.id===x.s):true).map(x=>x.s?{s:x.s}:{n:x.n,r:x.r}),mode:f.mode,odds,gs:f.gs?1:0};
 let c=f.id&&G.cu.c.find(x=>x.id===f.id);if(c)Object.assign(c,d);else{c=Object.assign({id:'u'+G.cu.nc++},d);G.cu.c.push(c)}
 const key='case:'+c.id;if(f.img)IM[key]=f.img;else if(f.rm)delete IM[key];
 imSave();save();cuSync();const was=f.id;ED.cs=newCs();edRender();edMsg(was?'Изменения сохранены ✓':'Кейс создан ✓',1)}
@@ -534,7 +542,7 @@ function edExport(){cuInit();const d={v:1,s:G.cu.s.map(s=>({...s,img:IM[sk(s.n)]
 function edImport(el){const fl=el.files[0];el.value='';if(!fl)return;const r=new FileReader();r.onload=()=>{let d;try{d=JSON.parse(r.result)}catch(e){alert('Не удалось прочитать файл');return}if(!d||!Array.isArray(d.s)||!Array.isArray(d.c)){alert('Не удалось прочитать файл');return}
 cuInit();if(!MK.length)mkBuild();const map={};let ns=0,nc=0;
 d.s.slice(0,MAXS).forEach(x=>{const n=cleanName(x&&x.n),p=+(x&&x.p);if(!n||!(p>=.01&&p<=1e6)||!RC[x.r])return;if(MK.some(m=>!m.cu&&m.n.toLowerCase()===n.toLowerCase()))return;let s=G.cu.s.find(y=>y.n.toLowerCase()===n.toLowerCase());if(s){s.r=x.r;s.p=+p.toFixed(2);s.nw=x.nw?1:0}else{if(G.cu.s.length>=MAXS)return;s={id:'s'+G.cu.ns++,n,r:x.r,p:+p.toFixed(2),nw:x.nw?1:0};G.cu.s.push(s)}map[x.id]=s.id;if(okImg(x.img))IM[sk(s.n)]=x.img;ns++});
-d.c.slice(0,MAXC).forEach(x=>{const n=cleanName(x&&x.n,50),p=+(x&&x.p);if(!n||!(p>=.01&&p<=1e5)||G.cu.c.length>=MAXC)return;const items=[];(Array.isArray(x.items)?x.items:[]).forEach(i=>{if(i&&i.s){if(map[i.s])items.push({s:map[i.s]})}else if(i&&RC[i.r]&&cleanName(i.n))items.push({n:cleanName(i.n),r:i.r})});const odds={};RN.forEach(q=>{if(x.odds&&x.odds[q]!==undefined&&x.odds[q]!=='')odds[q]=Math.max(0,+x.odds[q]||0)});const c={id:'u'+G.cu.nc++,n,p:+p.toFixed(2),c:okColor(x.c),items,mode:x.mode==='man'?'man':'auto',odds};G.cu.c.push(c);if(okImg(x.img))IM['case:'+c.id]=x.img;nc++});
+d.c.slice(0,MAXC).forEach(x=>{const n=cleanName(x&&x.n,50),p=+(x&&x.p);if(!n||!(p>=.01&&p<=1e5)||G.cu.c.length>=MAXC)return;const items=[];(Array.isArray(x.items)?x.items:[]).forEach(i=>{if(i&&i.s){if(map[i.s])items.push({s:map[i.s]})}else if(i&&RC[i.r]&&cleanName(i.n))items.push({n:cleanName(i.n),r:i.r})});const odds={};RN.forEach(q=>{if(x.odds&&x.odds[q]!==undefined&&x.odds[q]!=='')odds[q]=Math.max(0,+x.odds[q]||0)});const c={id:'u'+G.cu.nc++,n,p:+p.toFixed(2),c:okColor(x.c),items,mode:x.mode==='man'?'man':'auto',odds,gs:x.gs?1:0};G.cu.c.push(c);if(okImg(x.img))IM['case:'+c.id]=x.img;nc++});
 imSave();save();cuSync();edRender();alert('Импорт: скинов '+ns+', кейсов '+nc)};r.readAsText(fl)}
 cuInit();cuSync();
 
@@ -1308,6 +1316,6 @@ function setNY(on){NYM=!!on;try{localStorage.setItem('cs2ny',NYM?'1':'0')}catch(
  const lg=document.querySelector('.lg');if(lg)lg.textContent=NYM?'🎄':'◆';SND.ny(NYM)}
 setNY(NYM);nwBadge();
 
-render();loadAuto();
+render();loadPrices().then(loadAuto,loadAuto);
 setLang(LANG);
 </script></body></html>
