@@ -79,12 +79,40 @@ select,input{background:#0f1520;border-color:#ffffff22}
 @media(max-width:560px){.logo>div:last-child{display:none}header.top{gap:6px;padding:0 8px}.wal{padding:3px 3px 3px 8px}.wal .bal{font-size:14px}.lang button{padding:5px 6px}.pts{padding:5px 7px}.sndb{padding:5px 7px}}
 #upM .card{position:relative}.upb{position:absolute;top:7px;right:9px;z-index:2;background:#000b;border:1px solid #ffffff30;color:#fff;font-size:11px;font-weight:800;padding:1px 6px;border-radius:7px}
 .wheel{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}.wheel.drag{cursor:grabbing}
+
+/* ===== новости ===== */
+#nwB{position:relative}#nwB.new::after{content:"";position:absolute;top:2px;right:2px;width:9px;height:9px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 0 2px #0b1019}
+.sndb.on{background:#ff5d5d30;border-color:#ff5d5d99}
+#nw>div{text-align:left;width:min(560px,94vw);max-height:90vh;overflow:auto;--c:#ff5d5d}
+.nwh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nwc{background:#ffffff0a;border:1px solid #ffffff16;border-radius:12px;padding:14px;margin-top:12px}
+.nwc h3{margin:2px 0 6px;font-size:17px}.nwc p{margin:0 0 12px;line-height:1.5;color:var(--tx)}.nwc button{width:100%;padding:11px}
+.nwok{color:#5ddc7a;font-weight:700}
+/* ===== новогодняя тема (включается классом body.ny) ===== */
+#snow{position:fixed;inset:0;pointer-events:none;z-index:4;overflow:hidden;display:none}
+body.ny #snow{display:block}
+#snow i{position:absolute;top:-12px;left:var(--x);width:var(--s);height:var(--s);border-radius:50%;background:#fff;opacity:var(--o);animation:snowf var(--d) linear var(--l) infinite}
+@keyframes snowf{to{transform:translate3d(var(--dx),108vh,0)}}
+@keyframes nytw{50%{opacity:.45}}
+@media(prefers-reduced-motion:reduce){#snow{display:none!important}body.ny header.top::after{animation:none!important}}
+body.ny{--bg:#0d1a2b;--card:#16263b;--ac:#ff5d5d;--mu:#9bb0c9;background:radial-gradient(1100px 480px at 50% -140px,#2a5a8a66,#0000),#0d1a2b}
+body.ny header.top{background:#0a1626ee;border-bottom:1px solid #ffffff22}
+body.ny header.top::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:12px;pointer-events:none;animation:nytw 1.6s ease-in-out infinite;
+background:radial-gradient(circle at 10px 6px,#ff4d4d 0 4px,#0000 5px) 0 0/48px 12px,radial-gradient(circle at 22px 6px,#ffd34d 0 4px,#0000 5px) 0 0/48px 12px,radial-gradient(circle at 34px 6px,#3ddc84 0 4px,#0000 5px) 0 0/48px 12px,radial-gradient(circle at 46px 6px,#4fc3f7 0 4px,#0000 5px) 0 0/48px 12px,linear-gradient(#ffffff40,#ffffff40) 0 1px/100% 1px no-repeat}
+body.ny .lg{background:linear-gradient(135deg,#ff6b6b,#2fbf71);box-shadow:0 0 20px #ff4d4d66;font-size:20px}
+body.ny .lang button.on{background:linear-gradient(#ff8080,#e03a3a);color:#fff;box-shadow:0 0 14px #ff4d4d55}
+body.ny header.top nav button.on{background:linear-gradient(#0000,#ff5d5d2e)}
+body.ny .sw.on{background:#a82828;border-color:#ff5d5d}
+body.ny .sndp input[type=range]{accent-color:#ff5d5d}
+body.ny main h2::before{content:"❄ ";color:#9fd8ff}
+body.ny .mark{background:#ff5d5d}
+body.ny :is(main,.modal) button:not(.g):not(.sw){background:linear-gradient(#ff7b7b,#e03a3a);box-shadow:0 2px 0 #8f1f1f;color:#fff}
 </style>
 </head><body>
 <svg class="bgmap" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="vg" cx=".5" cy=".45" r=".75"><stop offset=".5" stop-color="#0a0d13" stop-opacity="0"/><stop offset="1" stop-color="#0a0d13" stop-opacity=".92"/></radialGradient></defs><g fill="none" stroke="#9db7ff" stroke-width="2.5" opacity=".13"><path d="M120 150h330v120h140v-60h250v140h200V120h300v200h-90v150h160v320h-420v-130h-200v130H480V600H300v-90H120z"/><path d="M450 270v200h140M840 350h240M1000 120v230M300 510v-130h150M690 600V470h150v130M1190 470v130M1380 320h90"/><rect x="170" y="190" width="140" height="110" rx="6"/><rect x="1130" y="170" width="150" height="120" rx="6"/><rect x="760" y="215" width="90" height="70"/><rect x="560" y="660" width="120" height="90"/><circle cx="250" cy="245" r="48"/><circle cx="1205" cy="230" r="52"/><circle cx="820" cy="520" r="34" stroke-dasharray="8 8"/><path d="M0 450h1600M800 0v900" stroke-dasharray="3 14" opacity=".5"/></g><g fill="#9db7ff" opacity=".18" font-family="sans-serif" font-weight="800" font-size="46" text-anchor="middle"><text x="250" y="262">A</text><text x="1205" y="247">B</text></g><rect width="1600" height="900" fill="url(#vg)"/></svg>
 <header class="top"><div class="logo"><div class="lg">◆</div><div><b>Кейсер</b><small>симулятор кейсов</small></div></div>
 <nav><button id="t-inv" class="g" onclick="show('inv')">Инвентарь</button><button id="t-cases" class="on" onclick="show('cases')">Кейсы</button><button id="t-up" class="g" onclick="show('up')">Апгрейд</button><button id="t-ct" class="g" onclick="show('ct')">Контракты</button><button id="t-mk" class="g" onclick="show('mk')">Рынок</button><button id="t-bp" class="g" onclick="show('bp')">Battle Pass</button><button id="t-hi" class="g" onclick="show('hi')">История</button><button id="t-ed" class="g" onclick="show('ed')">Редактор</button></nav>
-<div style="justify-self:end;display:flex;gap:10px;align-items:center"><button class="sndb" id="sndB" onclick="sndPanel(event)" title="Звук и музыка" aria-label="Sound">🔊</button><div class="lang" id="lang" role="group" aria-label="Language"><button id="l-ru" class="on" onclick="setLang('ru')">RU</button><button id="l-en" onclick="setLang('en')">EN</button></div><div class="pts" onclick="show('bp')" title="Поинты Battle Pass">★ <span id="pts">0</span></div><div class="wal" onclick="show('dep')" title="Баланс и настройки"><div class="bal" id="bal"></div><button>+</button></div></div></header>
+<div style="justify-self:end;display:flex;gap:10px;align-items:center"><button class="sndb" id="nyB" onclick="setNY(!NYM)" title="Новогодний режим" aria-label="New Year mode">🎄</button><button class="sndb" id="sndB" onclick="sndPanel(event)" title="Звук и музыка" aria-label="Sound">🔊</button><button class="sndb" id="nwB" onclick="openNews()" title="Новости" aria-label="News">📰</button><div class="lang" id="lang" role="group" aria-label="Language"><button id="l-ru" class="on" onclick="setLang('ru')">RU</button><button id="l-en" onclick="setLang('en')">EN</button></div><div class="pts" onclick="show('bp')" title="Поинты Battle Pass">★ <span id="pts">0</span></div><div class="wal" onclick="show('dep')" title="Баланс и настройки"><div class="bal" id="bal"></div><button>+</button></div></div></header>
 <div class="sndp" id="sndP" hidden>
 <div class="sndr"><span>Звуковые эффекты</span><button class="sw" id="sw-fx" onclick="SND.tog('fx')"><i></i></button></div>
 <input type="range" min="0" max="100" id="sv-fx" oninput="SND.vol('fv',this.value)" onchange="SND.P.tick(1)">
@@ -123,6 +151,7 @@ select,input{background:#0f1520;border-color:#ffffff22}
 <div id="edB"></div></section>
 </main>
 <div class="modal" id="md"><div id="mb"></div></div>
+<div class="modal" id="nw" onclick="if(event.target===this)closeNews()"><div id="nwb"></div></div>
 <div class="modal" id="dv" onclick="if(event.target===this)closeDV()"><div id="db"></div></div>
 <script>
 const RC={b:['#4b69ff','Армейское'],p:['#8847ff','Запрещённое'],k:['#d32ce6','Засекреченное'],r:['#eb4b4b','Тайное'],g:['#ffd700','Редкий предмет']};
@@ -329,7 +358,7 @@ function closeM(){$('md').classList.remove('on')}
 function sell(id){const i=G.inv.findIndex(x=>x.id===id);if(i<0)return;G.m=+(G.m+G.inv[i].p).toFixed(2);G.inv.splice(i,1);save();render()}
 function sellAll(){if(!G.inv.length||!confirm('Продать все предметы?'))return;G.m=+(G.m+G.inv.reduce((a,i)=>a+i.p,0)).toFixed(2);G.inv=[];save();render()}
 function add(x){if(!(x>0))return;G.m=+(G.m+x).toFixed(2);save();render()}
-function resetAll(){if(confirm('Удалить весь прогресс?')){const cu=G.cu;G={m:100,inv:[],o:0,sp:0,best:0,uid:1,cu,pv:2};cuSync();save();render()}}
+function resetAll(){if(confirm('Удалить весь прогресс?')){const cu=G.cu;G={m:100,inv:[],o:0,sp:0,best:0,uid:1,cu,pv:2,nw:G.nw};cuSync();save();render()}}
 const grpOf=t=>NWT.includes(t)?t:'skin',isNK=t=>NWT.includes(t);
 function histAdd(x){G.h=G.h||[];G.h.unshift({n:x.n,r:x.r,w:x.w,p:x.p,k:x.k,t:Date.now()});if(G.h.length>200)G.h.length=200}
 const HID=t=>(G.hid&&t in G.hid)?G.hid[t]:(t==='col'||t==='wep');
@@ -1119,7 +1148,7 @@ const EN_R=[
  [/\(ещё (\d+)\)/g,(m,a)=>'('+a+' more)'],
  [/ за (?=\$)/g,' for ']
 ];
-const EN_M=new Map(EN_P);
+EN_P.push(...[["Новогодний режим", "New Year mode"], ["Новости", "News"], ["Новогоднее обновление", "New Year update"], ["Теперь есть новости", "News section is here"], ["В игре появилась новогодняя тема: снег, гирлянды и праздничная музыка. Включить или выключить её можно кнопкой 🎄 в шапке — вернётся обычный интерфейс.", "The game has a New Year theme: snow, garlands and festive music. Toggle it with the 🎄 button in the header — the regular interface comes right back."], ["Здесь будем писать об обновлениях игры. Заглядывай почаще — за каждую новость можно забрать награду: скин или деньги.", "Game updates will be posted here. Check back often — every news post has a reward: a skin or money."], ["Забрать награду", "Claim reward"], ["Награда получена:", "Reward claimed:"]]);const EN_M=new Map(EN_P);
 const EN_RE=new RegExp('(?<![А-Яа-яЁё])(?:'+EN_P.map(p=>p[0]).sort((a,b)=>b.length-a.length).map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?![А-Яа-яЁё])','g');
 const CY=/[А-Яа-яЁё]/;
 let LANG='ru';try{LANG=localStorage.getItem('cs2lang')==='en'?'en':'ru'}catch(e){}
@@ -1152,7 +1181,7 @@ const SND=(()=>{
  let ctx=null,fx,mu,pad,arp,nz,mon=false,tmr=0,nxt=0,si=0,trk=null;const S={fx:1,mu:1,fv:.7,mv:.4},cnt={};
  try{Object.assign(S,JSON.parse(localStorage.getItem('cs2snd')||'{}'))}catch(e){}
  const store=()=>{try{localStorage.setItem('cs2snd',JSON.stringify(S))}catch(e){}};
- const mtof=m=>440*Math.pow(2,(m-69)/12),BPM=84,STEP=60/BPM/2;
+ const mtof=m=>440*Math.pow(2,(m-69)/12);let BPM=84,STEP=60/BPM/2,NY=false,DL=null;
  const PROG=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],PAT=[0,1,2,1,2,1,0,2];
  function ensure(){
   if(!ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;
@@ -1160,7 +1189,7 @@ const SND=(()=>{
    const cp=ctx.createDynamicsCompressor();cp.connect(ctx.destination);
    fx=ctx.createGain();mu=ctx.createGain();fx.connect(cp);mu.connect(cp);fx.gain.value=S.fx?S.fv:0;mu.gain.value=0;
    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1100;pad=ctx.createGain();pad.connect(lp);lp.connect(mu);
-   arp=ctx.createGain();arp.connect(mu);const dl=ctx.createDelay(1),fb=ctx.createGain(),wt=ctx.createGain();dl.delayTime.value=STEP*3;fb.gain.value=.38;wt.gain.value=.5;arp.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(wt);wt.connect(mu);
+   arp=ctx.createGain();arp.connect(mu);const dl=DL=ctx.createDelay(1),fb=ctx.createGain(),wt=ctx.createGain();dl.delayTime.value=STEP*3;fb.gain.value=.38;wt.gain.value=.5;arp.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(wt);wt.connect(mu);
    const b=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;nz=b}
   if(ctx.state==='suspended')ctx.resume().catch(()=>{});return ctx}
  const ok=()=>S.fx&&ensure()&&ctx.state!=='closed';
@@ -1176,8 +1205,8 @@ const SND=(()=>{
  const sp=(f,t,ty,g,d)=>tone({f,t,type:ty||'triangle',g:g||.14,d:d||.5});
  const P={
   tick:p=>N('tick',()=>tone({f:1500*p,f2:850*p,d:.045,type:'square',g:.08})),
-  click:()=>N('click',()=>tone({f:720,f2:520,d:.05,type:'sine',g:.09})),
-  open:()=>N('open',()=>{noise({f1:180,f2:2600,d:.6,q:1.2,g:.22,a:.12});tone({f:120,f2:48,d:.32,g:.32});tone({f:1900,f2:1200,d:.05,type:'square',g:.05,t:.05})}),
+  click:()=>N('click',()=>{if(NY){tone({f:2093,type:'sine',g:.07,d:.3});tone({f:4186,type:'sine',g:.02,d:.12});return}tone({f:720,f2:520,d:.05,type:'sine',g:.09})}),
+  open:()=>N('open',()=>{noise({f1:180,f2:2600,d:.6,q:1.2,g:.22,a:.12});tone({f:120,f2:48,d:.32,g:.32});tone({f:1900,f2:1200,d:.05,type:'square',g:.05,t:.05});if(NY)[0,.08,.16,.26,.36].forEach(t=>noise({f1:7500,type:'highpass',d:.09,g:.07,a:.003,t}))}),
   skip:()=>N('skip',()=>{noise({f1:500,f2:6000,d:.28,q:2,g:.2,a:.03});tone({f:300,f2:900,d:.2,type:'sawtooth',g:.05})}),
   reveal:(r,o)=>N('reveal-'+r,()=>{o=o||0;
    if(r==='b')sp(784,o,'sine',.13,.35);
@@ -1185,7 +1214,7 @@ const SND=(()=>{
    else if(r==='k'){[523,659,784].forEach((f,i)=>sp(f,o+i*.09))}
    else if(r==='r'){[523,659,784,1047].forEach((f,i)=>sp(f,o+i*.09,'triangle',.15,.7));noise({f1:1500,f2:7000,d:.6,q:3,g:.07,t:o+.2});sp(1568,o+.4,'sine',.08,.8)}
    else{[262,330,392,523].forEach(f=>sp(f,o,'sawtooth',.06,1.6));[1047,1319,1568,2093,2637].forEach((f,i)=>sp(f,o+.15+i*.1,'sine',.1,.9));noise({f1:400,f2:9000,d:1,q:2,g:.12,a:.4,t:o});tone({f:90,f2:40,d:.5,g:.35,t:o})}}),
-  coin:()=>N('coin',()=>{sp(1318,0,'sine',.12,.18);sp(1760,.07,'sine',.12,.28)}),
+  coin:()=>N('coin',()=>{if(NY){sp(1568,0,'sine',.1,.5);sp(2093,.08,'sine',.1,.6);sp(2637,.16,'sine',.08,.9);noise({f1:7000,type:'highpass',d:.25,g:.04,a:.003,t:.02});return}sp(1318,0,'sine',.12,.18);sp(1760,.07,'sine',.12,.28)}),
   buy:()=>N('buy',()=>{sp(988,0,'sine',.12,.16);sp(740,.07,'sine',.12,.16);sp(1175,.14,'sine',.12,.3)}),
   err:()=>N('err',()=>{tone({f:160,f2:110,d:.16,type:'sawtooth',g:.1});tone({f:160,f2:110,d:.18,type:'sawtooth',g:.1,t:.2})}),
   upWin:()=>N('upWin',()=>{[440,554,659,880,1109].forEach((f,i)=>sp(f,i*.07,'triangle',.15,.45));sp(1760,.4,'sine',.1,.9);noise({f1:800,f2:8000,d:.7,q:2,g:.08,t:.2})}),
@@ -1198,7 +1227,15 @@ const SND=(()=>{
  function track(info){const s=info[0]&&info[0].s;if(!s)return;let li=null;loop(()=>{const m=new DOMMatrix(getComputedStyle(s).transform),i=Math.floor((-m.m41+s.parentElement.clientWidth/2)/128);if(li===null){li=i;return false}if(i!==li){li=i;return true}return false})}
  function wheel(el){if(!el)return;let prev=null,acc=0,nt=20;loop(()=>{const m=new DOMMatrix(getComputedStyle(el).transform),a=Math.atan2(m.b,m.a)*180/Math.PI;let hit=false;if(prev!==null){let d=a-prev;if(d<-180)d+=360;if(d>180)d-=360;acc+=d;if(acc>=nt){nt=Math.floor(acc/20)*20+20;hit=true}}prev=a;return hit})}
  /* музыка */
- function mstep(t,i){const ch=PROG[(i>>3)&3],st=i&7;
+ const NYC=[[48,52,55],[48,52,55],[48,52,55],[48,52,55],[53,57,60],[48,52,55],[55,59,62],[48,52,55]],NYMEL=new Array(64).fill(null);
+ [[76,0,2],[76,2,2],[76,4,4],[76,8,2],[76,10,2],[76,12,4],[76,16,2],[79,18,2],[72,20,3],[74,23,1],[76,24,8],[77,32,2],[77,34,2],[77,36,3],[77,39,1],[77,40,2],[76,42,2],[76,44,2],[76,46,1],[76,47,1],[79,48,2],[79,50,2],[77,52,2],[74,54,2],[72,56,8]].forEach(n=>NYMEL[n[1]]=n);
+ function nystep(t,i){const j=i&63,ch=NYC[j>>3],st=j&7;
+  if(st===0)ch.forEach(n=>tone({f:mtof(n+12),type:'triangle',g:.05,a:.25,h:STEP*7,d:STEP*8+.6,at:t,dest:pad}));
+  if(st===0||st===4)tone({f:mtof(ch[0]-12),type:'sine',g:.17,a:.01,d:STEP*3.4,at:t,dest:mu});
+  noise({f1:st%2?7800:6400,type:'highpass',d:.07,g:st%2?.035:.05,a:.003,at:t,dest:mu});
+  const m=NYMEL[j];if(m){const f=mtof(m[0]),d=STEP*m[1]+.5;
+   tone({f,type:'sine',g:.1,a:.004,d,at:t,dest:arp});tone({f:f*2,type:'sine',g:.035,a:.002,d:d*.55,at:t,dest:arp});tone({f:f*3.01,type:'sine',g:.015,a:.002,d:d*.3,at:t,dest:arp})}}
+ function mstep(t,i){if(NY)return nystep(t,i);const ch=PROG[(i>>3)&3],st=i&7;
   if(st===0){ch.forEach(n=>tone({f:mtof(n+12),type:'triangle',g:.07,a:1.1,h:STEP*7,d:STEP*8+1.4,at:t,dest:pad}));tone({f:mtof(ch[0]-24),type:'sine',g:.2,a:.02,d:STEP*3.6,at:t,dest:mu})}
   if(st===4)tone({f:mtof(ch[0]-12),type:'sine',g:.14,a:.02,d:STEP*3,at:t,dest:mu});
   if(st%4===0)tone({f:130,f2:42,type:'sine',g:.2,a:.003,d:.22,at:t,dest:mu});
@@ -1211,6 +1248,7 @@ const SND=(()=>{
  function ui(){const b=$('sndB');if(!b)return;b.textContent=(S.fx||S.mu)?'🔊':'🔇';[['fx','fv'],['mu','mv']].forEach(([k,v])=>{const w=$('sw-'+k),r=$('sv-'+k);if(w){w.classList.toggle('on',!!S[k]);w.setAttribute('aria-pressed',S[k]?'true':'false')}if(r){r.value=Math.round(S[v]*100);r.disabled=!S[k]}})}
  return{S,cnt,
   init(){ensure();if(S.mu)mstart()},
+  ny(on){NY=!!on;BPM=NY?116:84;STEP=60/BPM/2;if(DL&&ctx)DL.delayTime.value=STEP*3;if(mon){mstop();setTimeout(()=>{if(S.mu&&!mon)mstart()},350)}},
   tog(k){S[k]=S[k]?0:1;store();if(k==='mu'){S.mu?mstart():mstop()}else{apply();if(S.fx)P.click()}ui()},
   vol(v,x){S[v]=Math.max(0,Math.min(1,+x/100));store();apply();ui()},
   ui,stop,P,
@@ -1239,6 +1277,32 @@ SND.ui();
  w.addEventListener('pointerdown',e=>{if(upBusy)return;const p=ang(e);if(p.d<.5||p.d>1.02)return;on=true;w.classList.add('drag');try{w.setPointerCapture(e.pointerId)}catch(x){}set(e);e.preventDefault()});
  w.addEventListener('pointermove',e=>{if(on)set(e)});
  const end=()=>{on=false;w.classList.remove('drag')};w.addEventListener('pointerup',end);w.addEventListener('pointercancel',end);w.addEventListener('lostpointercapture',end)})();
+
+/* ================= Новости и награды ================= */
+/* Чтобы добавить новость — допиши объект в начало массива NEWS (id должен быть уникальным) */
+const NEWS=[
+{id:'ny26',d:'17.11.2026',t:'🎄 Новогоднее обновление',b:'В игре появилась новогодняя тема: снег, гирлянды и праздничная музыка. Включить или выключить её можно кнопкой 🎄 в шапке — вернётся обычный интерфейс.'},
+{id:'news1',d:'17.11.2026',t:'📰 Теперь есть новости',b:'Здесь будем писать об обновлениях игры. Заглядывай почаще — за каждую новость можно забрать награду: скин или деньги.'}
+];
+function nwBadge(){const b=$('nwB');if(b)b.classList.toggle('new',NEWS.some(n=>!(G.nw||{})[n.id]))}
+function newsRender(){$('nwb').innerHTML='<div class="nwh"><h2 style="margin:0">📰 Новости</h2><button class="g" onclick="closeNews()">✕</button></div>'+
+ NEWS.map(n=>{const c=(G.nw||{})[n.id];return `<div class="nwc"><div class="mu">${n.d}</div><h3>${n.t}</h3><p>${n.b}</p>${c?`<div class="nwok">✓ Награда получена: ${esc(c)}</div>`:`<button onclick="claimNews('${n.id}')">🎁 Забрать награду</button>`}</div>`}).join('')}
+function openNews(){newsRender();$('nw').classList.add('on')}
+function closeNews(){$('nw').classList.remove('on')}
+function claimNews(id){G.nw=G.nw||{};if(G.nw[id]||!NEWS.some(n=>n.id===id))return;let d;
+ if(Math.random()<.5){const m=10+Math.floor(Math.random()*31);G.m=+(G.m+m).toFixed(2);d='+'+fm(m)}
+ else{const it=pick(CASES[Math.random()*4|0]);it.k='Новости';it.id=G.uid++;G.inv.push(it);histAdd(it);if(it.p>G.best)G.best=it.p;d=it.n+' ('+fm(it.p)+')'}
+ G.nw[id]=d;save();render();nwBadge();newsRender();SND.coin()}
+
+/* ================= Новогодняя тема (можно выключить кнопкой 🎄) ================= */
+let NYM=true;try{const v=localStorage.getItem('cs2ny');NYM=v===null?true:v==='1'}catch(e){}
+(function(){const d=document.createElement('div');d.id='snow';d.setAttribute('aria-hidden','true');let h='';
+ for(let i=0;i<48;i++){h+=`<i style="--x:${(Math.random()*100).toFixed(1)}%;--s:${(2+Math.random()*4).toFixed(1)}px;--o:${(.35+Math.random()*.55).toFixed(2)};--d:${(8+Math.random()*10).toFixed(1)}s;--l:-${(Math.random()*16).toFixed(1)}s;--dx:${(Math.random()*120-60).toFixed(0)}px"></i>`}
+ d.innerHTML=h;document.body.appendChild(d)})();
+function setNY(on){NYM=!!on;try{localStorage.setItem('cs2ny',NYM?'1':'0')}catch(e){}
+ document.body.classList.toggle('ny',NYM);$('nyB').classList.toggle('on',NYM);
+ const lg=document.querySelector('.lg');if(lg)lg.textContent=NYM?'🎄':'◆';SND.ny(NYM)}
+setNY(NYM);nwBadge();
 
 render();loadAuto();
 setLang(LANG);
