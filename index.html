@@ -110,7 +110,7 @@ body.ny :is(main,.modal) button:not(.g):not(.sw){background:linear-gradient(#ff7
 </style>
 </head><body>
 <svg class="bgmap" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="vg" cx=".5" cy=".45" r=".75"><stop offset=".5" stop-color="#0a0d13" stop-opacity="0"/><stop offset="1" stop-color="#0a0d13" stop-opacity=".92"/></radialGradient></defs><g fill="none" stroke="#9db7ff" stroke-width="2.5" opacity=".13"><path d="M120 150h330v120h140v-60h250v140h200V120h300v200h-90v150h160v320h-420v-130h-200v130H480V600H300v-90H120z"/><path d="M450 270v200h140M840 350h240M1000 120v230M300 510v-130h150M690 600V470h150v130M1190 470v130M1380 320h90"/><rect x="170" y="190" width="140" height="110" rx="6"/><rect x="1130" y="170" width="150" height="120" rx="6"/><rect x="760" y="215" width="90" height="70"/><rect x="560" y="660" width="120" height="90"/><circle cx="250" cy="245" r="48"/><circle cx="1205" cy="230" r="52"/><circle cx="820" cy="520" r="34" stroke-dasharray="8 8"/><path d="M0 450h1600M800 0v900" stroke-dasharray="3 14" opacity=".5"/></g><g fill="#9db7ff" opacity=".18" font-family="sans-serif" font-weight="800" font-size="46" text-anchor="middle"><text x="250" y="262">A</text><text x="1205" y="247">B</text></g><rect width="1600" height="900" fill="url(#vg)"/></svg>
-<header class="top"><div class="logo"><div class="lg">◆</div><div><b>Кейсер</b><small>симулятор кейсов</small></div></div>
+<header class="top"><div class="logo"><div class="lg">◆</div><div><b>Кейсер</b><small>симулятор кейсов</small><small id="ptm" style="display:block;white-space:nowrap"></small></div></div>
 <nav><button id="t-inv" class="g" onclick="show('inv')">Инвентарь</button><button id="t-cases" class="on" onclick="show('cases')">Кейсы</button><button id="t-up" class="g" onclick="show('up')">Апгрейд</button><button id="t-ct" class="g" onclick="show('ct')">Контракты</button><button id="t-mk" class="g" onclick="show('mk')">Рынок</button><button id="t-bp" class="g" onclick="show('bp')">Battle Pass</button><button id="t-hi" class="g" onclick="show('hi')">История</button><button id="t-ed" class="g" onclick="show('ed')">Редактор</button></nav>
 <div style="justify-self:end;display:flex;gap:10px;align-items:center"><button class="sndb" id="nyB" onclick="setNY(!NYM)" title="Новогодний режим" aria-label="New Year mode">🎄</button><button class="sndb" id="sndB" onclick="sndPanel(event)" title="Звук и музыка" aria-label="Sound">🔊</button><button class="sndb" id="nwB" onclick="openNews()" title="Новости" aria-label="News">📰</button><div class="lang" id="lang" role="group" aria-label="Language"><button id="l-ru" class="on" onclick="setLang('ru')">RU</button><button id="l-en" onclick="setLang('en')">EN</button></div><div class="pts" onclick="show('bp')" title="Поинты Battle Pass">★ <span id="pts">0</span></div><div class="wal" onclick="show('dep')" title="Баланс и настройки"><div class="bal" id="bal"></div><button>+</button></div></div></header>
 <div class="sndp" id="sndP" hidden>
@@ -211,10 +211,10 @@ async function getJ(f){let e;for(const b of SRC){try{const ac=new AbortControlle
 /* ====== реальные цены: prices.json из твоего репозитория (его раз в неделю обновляет GitHub Actions) ====== */
 const PK=1; /* множитель реальных цен: 1 = как на рынке, 2 = как раньше PM */
 const GH_REPO=''; /* 'ник/репозиторий' — нужно только если игра не на GitHub Pages */
-let PRICES={};
+let PRICES={},WM={},PR_UPD=0,PR_SEEN=0;
 function priceSrc(){let r=GH_REPO;if(!r&&/\.github\.io$/.test(location.hostname)){const u=location.hostname.split('.')[0],p=location.pathname.split('/')[1];r=u+'/'+(p&&!/\.html?$/.test(p)?p:u+'.github.io')}return(r?['https://cdn.jsdelivr.net/gh/'+r+'@main/prices.json','https://raw.githubusercontent.com/'+r+'/main/prices.json']:[]).concat(['prices.json'])}
-async function loadPrices(){try{const c=JSON.parse(localStorage.getItem('cs2prices')||'null');if(c&&c.p)PRICES=c.p}catch(e){}
-for(const u of priceSrc()){try{const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),8000);const r=await fetch(u,{signal:ac.signal,cache:'no-cache'});clearTimeout(tm);if(!r.ok)continue;const j=await r.json();if(j&&j.p&&typeof j.p==='object'){PRICES=j.p;try{localStorage.setItem('cs2prices',JSON.stringify(j))}catch(e){}BPM.clear();MK=[];return}}catch(e){}}}
+async function loadPrices(){try{const c=JSON.parse(localStorage.getItem('cs2prices')||'null');if(c&&c.p){PRICES=c.p;WM=c.m||{};PR_UPD=Date.parse(c.updated)||0}}catch(e){}
+for(const u of priceSrc()){try{const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),8000);const r=await fetch(u,{signal:ac.signal,cache:'no-cache'});clearTimeout(tm);if(!r.ok)continue;const j=await r.json();if(j&&j.p&&typeof j.p==='object'){PRICES=j.p;WM=j.m||{};PR_UPD=Date.parse(j.updated)||0;try{localStorage.setItem('cs2prices',JSON.stringify(j))}catch(e){}BPM.clear();MK=[];return}}catch(e){}}}
 const stat=t=>{let el=$('ist');if(!el){el=document.createElement('div');el.id='ist';el.className='mu';el.style.cssText='padding:0 16px 8px;max-width:1100px;margin:auto';document.querySelector('header').after(el)}el.textContent=t};
 
 /* ====== все скины CS2 из базы → играбельные кейсы (коллекции, оружие, ножи, перчатки, агенты, музыка) ====== */
@@ -287,9 +287,9 @@ function mkBuild(){inMk=1;BPM.clear();const m={};[...CASES.filter(k=>!k.cu),...C
 [...GOLD,...CASES.flatMap(k=>k.gold||[])].forEach(n=>{if(!m[n])m[n]={n,r:'g',p:basePrice(n,'g',{}),c:['Редкий предмет из кейсов'],t:'cs'}});MK=Object.values(m);inMk=0}
 function mkRender(){if(!MK.length)mkBuild();if(!$('mkc').options.length)$('mkc').innerHTML='<option value="">Все кейсы</option>'+CASES.map(k=>`<option>${k.n}</option>`).join('');
 const c=$('mkc').value,r=$('mkr').value,q=$('mks').value.toLowerCase();const l=MK.map((x,i)=>[x,i]).filter(([x])=>(!$('mkt').value||x.t===$('mkt').value||($('mkt').value==='own'&&x.t==='cnw'))&&(!c||x.c.includes(c))&&(!r||x.r===r)&&x.n.toLowerCase().includes(q));const sv=$('mko').value;if(sv)l.sort((a,b)=>{const x=a[0],y=b[0];return sv==='pa'?x.p-y.p:sv==='pd'?y.p-x.p:sv==='ra'?RO[x.r]-RO[y.r]||x.p-y.p:sv==='rd'?RO[y.r]-RO[x.r]||y.p-x.p:x.n.localeCompare(y.n)});
-const mk_=[c,r,q,sv,$('mkt').value].join('|');if(mk_!==MKK){MKK=mk_;MKN=150}
-$('mkl').innerHTML=l.slice(0,MKN).map(([x,i])=>`<div class="card cl" style="--c:${RC[x.r][0]};padding:8px" onclick="skinView('mk',${i})"><div class="gimg">${vis(sk(x.n),x.n,RC[x.r][0],56,0,0,1)}</div><div style="font-size:13px;font-weight:600">${x.n}</div><div class="mu">${RC[x.r][1]}</div><div class="mu">${x.c.slice(0,2).join(', ')}</div><div class="pr">${fm(x.p*.7)} – ${fm(x.p*1.6)}</div><button onclick="event.stopPropagation();mkBuy(${i})">Купить ${fm(mkCost(x))}</button></div>`).join('')+(l.length>MKN?`<button class="g" style="grid-column:1/-1" onclick="MKN+=150;mkRender()">Показать ещё (${Math.min(150,l.length-MKN)})</button>`:'')||'<p class="mu">Ничего не найдено</p>';$('mkn').textContent='Скинов: '+l.length}
-let MKN=150,MKK='';
+const mk_=[c,r,q,sv,$('mkt').value].join('|');if(mk_!==MKK){MKK=mk_;MKN=300}
+$('mkl').innerHTML=l.slice(0,MKN).map(([x,i])=>`<div class="card cl" style="--c:${RC[x.r][0]};padding:8px" onclick="skinView('mk',${i})"><div class="gimg">${vis(sk(x.n),x.n,RC[x.r][0],56,0,0,1)}</div><div style="font-size:13px;font-weight:600">${x.n}</div><div class="mu">${RC[x.r][1]}</div><div class="mu">${x.c.slice(0,2).join(', ')}</div><div class="pr">${fm(x.p*wrng(x.n)[0])} – ${fm(x.p*wrng(x.n)[1])}</div><button onclick="event.stopPropagation();mkBuy(${i})">Купить ${fm(mkCost(x))}</button></div>`).join('')+(l.length>MKN?`<button class="g" style="grid-column:1/-1" onclick="MKN+=300;mkRender()">Показать ещё (${Math.min(300,l.length-MKN)})</button>`:'')||'<p class="mu">Ничего не найдено</p>';$('mkn').textContent='Скинов: '+l.length}
+let MKN=300,MKK='';
 function closeDV(){$('dv').classList.remove('on')}
 function caseDetailOld(id){const k=CASES.find(x=>x.id===id);const all=[...k.b.map(n=>[n,'b']),...k.p2.map(n=>[n,'p']),...k.k.map(n=>[n,'k']),...k.r.map(n=>[n,'r'])];
 $('db').style.setProperty('--c',k.c);
@@ -364,11 +364,13 @@ function stkEst(n,r){const sp=String(n).split(' | ');if(sp.length<3||!/20\d\d/.t
 const ef=/\(Holo\)/i.test(nm)?'holo':/\(Foil\)/i.test(nm)?'foil':/\(Gold\)/i.test(nm)?'gold':/\(Glitter\)/i.test(nm)?'glitter':/\(Lenticular\)/i.test(nm)?'lenti':({b:'paper',p:'holo',k:'foil',r:'gold'})[r]||'paper';
 let base=.25;for(const[re,v]of STK_EVB)if(re.test(ev)){base=v;break}
 return +Math.max(.03,base*STK_EF[ef]*(.3+2.7*hash(nm.replace(/\s*\((Holo|Foil|Gold|Glitter|Lenticular)\)/i,'')+ev))).toFixed(2)}
+const wmul=(n,w)=>{const a=WM[norm(String(n).replace('StatTrak™ ',''))];return a&&a[w]>0?a[w]:WEARS[w][1]};
+const wrng=n=>{const v=WEARS.map((x,w)=>wmul(n,w));return[Math.min(...v),Math.max(...v)]};
 function basePrice(n,r,k){const cs=CSK.get(n);if(cs)return cs.p;const po=G.po&&G.po[norm(n)];if(po>0)return po;const lp=PRICES[norm(n)];if(lp>0)return lp*PK;if(/^Sticker \|/.test(n)){const e=stkEst(n,r);if(e)return e}if(k&&k.cu&&!inMk){if(!MK.length)mkBuild();const q=BPM.get(n);if(q!==undefined)return q}const[a,b]=RANGE[r];return PM*(a+(b-a)*hash(n))*(k.gm||1)}
 function pick(k){const o=k.odds||SHN;let x=Math.random()*100,r='b',a=0;for(const q of['g','r','k','p','b']){a+=o[q]||0;if(x<a){r=q;break}}
 const pool=r==='g'?(k.gold||GOLD):r==='b'?k.b:r==='p'?k.p2:r==='k'?k.k:k.r;
 const n=pool[Math.random()*pool.length|0],nk=NWT.includes(k.cat)||!!(CSK.get(n)&&CSK.get(n).nw),w=nk?0:(f=>f<.07?0:f<.15?1:f<.38?2:f<.45?3:4)(Math.random());
-const st=Math.random()<.1&&r!=='g'&&(!nk||k.cat==='mus');let p=basePrice(n,r,k)*(nk?1:WEARS[w][1])*(st?1.5:1);
+const st=Math.random()<.1&&r!=='g'&&(!nk||k.cat==='mus');let p=basePrice(n,r,k)*(nk?1:wmul(n,w))*(st?1.5:1);
 return{n:(st?'StatTrak™ ':'')+n,r,w:nk?'':WEARS[w][0],p:+Math.max(p,.01).toFixed(2),k:k.n}}
 function show(t){for(const x of['cases','open','inv','mk','dep','up','ct','hi','bp','ed'])$(x).hidden=x!==t;
 for(const b of['cases','inv','mk','up','ct','hi','bp','ed'])$('t-'+b).className=(b===t||(t==='open'&&b==='cases'))?'on':'g';render();if(t==='mk')mkRender();if(t==='up')upRender();if(t==='ct')ctRender();if(t==='hi')hiRender();if(t==='bp')bpRender();if(t==='ed')edRender()}
@@ -443,7 +445,7 @@ function ctRender(){CTS=new Set(G.inv.filter(i=>CTS.has(i.id)).map(i=>i.id));con
 const f=it[0];$('ctI').innerHTML=[...G.inv].filter(i=>i.r!=='g'&&i.r!=='r').sort((a,b)=>RO[a.r]-RO[b.r]||b.p-a.p).map(i=>miniC(i,CTS.has(i.id)?'on':'',(f&&f.r!==i.r&&!CTS.has(i.id))?'':'ctTog('+i.id+')')).join('')||'<p class="mu">Нужны предметы (не тайные и не ножи) — открой кейсы.</p>'}
 function ctGo(){const it=G.inv.filter(i=>CTS.has(i.id));if(it.length!==10)return;if(!MK.length)mkBuild();const nr={b:'p',p:'k',k:'r'}[it[0].r];const m0=MK.find(m=>m.n===it[0].n.replace('StatTrak™ ',''));const gp=grpOf((m0||{}).t);
 let pool=MK.filter(x=>x.r===nr&&grpOf(x.t)===gp);if(!pool.length)pool=MK.filter(x=>x.r===nr);if(!pool.length)return;const y=pool[Math.random()*pool.length|0],nk=isNK(y.t),w=(f=>f<.07?0:f<.15?1:f<.38?2:f<.45?3:4)(Math.random());
-const x={n:y.n,r:y.r,w:nk?'':WEARS[w][0],p:+Math.max(y.p*(nk?1:WEARS[w][1]),.01).toFixed(2),k:'Контракт',id:G.uid++};
+const x={n:y.n,r:y.r,w:nk?'':WEARS[w][0],p:+Math.max(y.p*(nk?1:wmul(y.n,w)),.01).toFixed(2),k:'Контракт',id:G.uid++};
 G.inv=G.inv.filter(i=>!CTS.has(i.id));G.inv.push(x);histAdd(x);G.bp=(G.bp||0)+CTPT;if(x.p>G.best)G.best=x.p;CTS=new Set();save();render();ctRender();SND.contract(x.r);$('ctRes').innerHTML='<div class="upp" style="max-width:260px;margin:10px 0"><div class="upt">Результат контракта</div>'+miniC(x)+'<div style="color:#ffd21f;margin-top:6px">+'+CTPT+' поинт.</div></div>'}
 const BPV={b:1,p:3,k:10,r:30,g:100};
 const UPPT=v=>Math.floor((+v||0)/5),CTPT=10; // апгрейд: 1 поинт за каждые $5 ставки; контракт: 10 поинтов
@@ -509,7 +511,7 @@ function edSkHTML(){const f=ED.sk,c=RC[f.r][0],ed=!!f.id;return `<div class="edg
 <div class="row" style="margin:10px 0 0"><button onclick="edSkSave()">${ed?'Сохранить':'Создать скин'}</button></div></div>
 <div><div class="row" style="margin-top:0"><b>Мои скины</b><span class="mu" id="edSc"></span><input id="edQ" placeholder="Поиск" value="${esc(ED.q)}" oninput="ED.q=this.value;edSkList()" style="width:140px"><select id="edRf" onchange="ED.rf=this.value;edSkList()"><option value="">Все редкости</option>${RN.map(q=>`<option value="${q}" ${ED.rf===q?'selected':''}>${RC[q][1]}</option>`).join('')}</select></div><div class="grid" id="edSl"></div></div></div>`}
 function edSk(k,v){ED.sk[k]=v;edRender()}
-function edPrice(){const f=ED.sk,p=+f.p,el=$('edPw');if(!el)return;if(!(p>0)){el.innerHTML='';return}el.innerHTML=f.nw?'<span class="mu">Фиксированная цена: без износов и StatTrak™</span>':'<div class="mu">Цена указана для «После полевых». Остальные износы:</div><div class="chips" style="margin-top:6px">'+WEARS.map(([n,m])=>`<span class="chip" style="--c:#ffffff55;cursor:default">${n} ${fm(p*m)}</span>`).join('')+'</div>'}
+function edPrice(){const f=ED.sk,p=+f.p,el=$('edPw');if(!el)return;if(!(p>0)){el.innerHTML='';return}el.innerHTML=f.nw?'<span class="mu">Фиксированная цена: без износов и StatTrak™</span>':'<div class="mu">Цена указана для «После полевых». Остальные износы:</div><div class="chips" style="margin-top:6px">'+WEARS.map(([wn,m],wi)=>`<span class="chip" style="--c:#ffffff55;cursor:default">${wn} ${fm(p*wmul(n,wi))}</span>`).join('')+'</div>'}
 function edSkList(){const q=ED.q.toLowerCase(),rf=ED.rf,all=G.cu.s,l=all.filter(s=>(!rf||s.r===rf)&&s.n.toLowerCase().includes(q)).sort((a,b)=>RO[b.r]-RO[a.r]||a.n.localeCompare(b.n)),used=s=>G.cu.c.filter(c=>c.items.some(x=>x.s===s.id)).length;
 $('edSc').textContent='('+all.length+')';
 $('edSl').innerHTML=l.map(s=>{const u=used(s);return `<div class="card edc" style="--c:${RC[s.r][0]};padding:8px;font-size:12px"><div class="gimg">${vis(sk(s.n),s.n,RC[s.r][0],56)}</div><b style="display:block;word-break:break-word">${esc(s.n)}</b><div class="mu">${RC[s.r][1]}${s.nw?' · Без износа':''}</div><div class="pr">${fm(s.p)}</div>${u?`<div class="mu">В кейсах: ${u}</div>`:''}<div class="row" style="gap:6px;margin:6px 0 0"><button class="g" style="flex:1;margin:0;width:auto" onclick="edSkEdit('${s.id}')">Изменить</button><button class="g" style="margin:0;width:auto" title="Удалить" onclick="edSkDel('${s.id}')">✕</button></div></div>`}).join('')||`<p class="mu">${all.length?'Ничего не найдено':'Пока нет своих скинов — создай первый.'}</p>`}
@@ -1230,7 +1232,10 @@ EN_P.push(...[["Новогодний режим", "New Year mode"], ["Новос
 ["Всё","All"],
 ["1 поинт =","1 point ="],
 ["Куплено","Purchased"]
-].forEach(p=>{if(!EN_P.some(q=>q[0]===p[0]))EN_P.push(p)});EN_R.push([/Введи число поинтов от 1 до (\d+)/g,(m,a)=>'Enter a number of points from 1 to '+a]);const EN_M=new Map(EN_P);
+].forEach(p=>{if(!EN_P.some(q=>q[0]===p[0]))EN_P.push(p)});EN_R.push([/Введи число поинтов от 1 до (\d+)/g,(m,a)=>'Enter a number of points from 1 to '+a]);/* перевод новости */[
+["💲 Цены исправлены","💲 Prices fixed"],
+["Цены предметов теперь близки к ценам Steam Market и обновляются раз в день: таймер до следующего обновления показан рядом с названием игры. У скинов появились настоящие цены для каждого износа, а дорогие наклейки (Katowice 2014 и другие) стоят примерно как в CS2. На рынке теперь показывается по 300 предметов за раз.","Item prices are now close to Steam Market prices and update once a day: a timer until the next update is shown next to the game title. Skins now have real prices for every wear, and expensive stickers (Katowice 2014 and others) cost about the same as in CS2. The market now shows 300 items at a time."]
+].forEach(p=>{if(!EN_P.some(q=>q[0]===p[0]))EN_P.push(p)});EN_R.push([/Цены обновятся через ([\d:]+)/g,(m,a)=>'Prices update in '+a]);const EN_M=new Map(EN_P);
 const EN_RE=new RegExp('(?<![А-Яа-яЁё])(?:'+EN_P.map(p=>p[0]).sort((a,b)=>b.length-a.length).map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?![А-Яа-яЁё])','g');
 const CY=/[А-Яа-яЁё]/;
 let LANG='ru';try{LANG=localStorage.getItem('cs2lang')==='en'?'en':'ru'}catch(e){}
@@ -1363,6 +1368,7 @@ SND.ui();
 /* ================= Новости и награды ================= */
 /* Чтобы добавить новость — допиши объект в начало массива NEWS (id должен быть уникальным) */
 const NEWS=[
+{id:'upd3',d:'19.11.2026',t:'💲 Цены исправлены',b:'Цены предметов теперь близки к ценам Steam Market и обновляются раз в день: таймер до следующего обновления показан рядом с названием игры. У скинов появились настоящие цены для каждого износа, а дорогие наклейки (Katowice 2014 и другие) стоят примерно как в CS2. На рынке теперь показывается по 300 предметов за раз.'},
 {id:'upd2',d:'18.11.2026',t:'🏷 Наклейки, свои цены и Battle Pass',b:'Наклейки из CS2: новые капсулы по турнирам. Наклеивай их на оружие — цена скина растёт, а в апгрейдах считается вместе с наклейками. Цены дорогих наклеек (Katowice 2014 и другие старые турниры) стали ближе к настоящим, а любую цену можно поменять самому: Редактор → Цены. В своих кейсах ножи и перчатки теперь скрыты, пока не включишь их показ в редакторе. Battle Pass: нож в конце можно купить только один раз, а поинты теперь можно обменять на деньги 1 к 1.'},
 {id:'ny26',d:'17.11.2026',t:'🎄 Новогоднее обновление',b:'В игре появилась новогодняя тема: снег, гирлянды и праздничная музыка. Включить или выключить её можно кнопкой 🎄 в шапке — вернётся обычный интерфейс.'},
 {id:'news1',d:'17.11.2026',t:'📰 Теперь есть новости',b:'Здесь будем писать об обновлениях игры. Заглядывай почаще — за каждую новость можно забрать награду: скин или деньги.'}
@@ -1388,5 +1394,13 @@ function setNY(on){NYM=!!on;try{localStorage.setItem('cs2ny',NYM?'1':'0')}catch(
 setNY(NYM);nwBadge();
 
 render();loadPrices().then(loadAuto,loadAuto);
+/* ====== цены обновляются раз в день (GitHub Actions, 06:00 UTC): таймер в шапке и автоподгрузка ====== */
+const PR_H=6;
+const prBound=t=>{const d=new Date(t);let b=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),PR_H);if(b>t)b-=864e5;return b};
+function prTick(){const now=Date.now(),b=prBound(now),el=$('ptm');
+if(el){const t=Math.max(0,b+864e5-now),p2=v=>String(v).padStart(2,'0'),txt=Object.keys(PRICES).length?'💲 Цены обновятся через '+p2(Math.floor(t/36e5))+':'+p2(Math.floor(t%36e5/6e4))+':'+p2(Math.floor(t%6e4/1e3)):'⚠ prices.json не найден (цены примерные)';if(el.textContent!==txt)el.textContent=txt}
+if(PR_UPD<b&&now>=b+6e5&&now-PR_SEEN>3e5){PR_SEEN=now;loadPrices().then(()=>{render();if(!$('mk').hidden)mkRender()})}}
+PR_SEEN=Date.now();setInterval(prTick,1000);prTick();
+
 setLang(LANG);
 </script></body></html>
