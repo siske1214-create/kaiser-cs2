@@ -2,7 +2,7 @@ name: Update prices
 
 on:
   schedule:
-    - cron: '0 6 * * 1'   # раз в неделю, по понедельникам
+    - cron: '0 6 * * *'   # раз в день в 06:00 UTC (в игре таймер считает от этого же времени)
   workflow_dispatch:       # можно запустить вручную кнопкой Run workflow
 
 permissions:
@@ -18,6 +18,8 @@ jobs:
           python-version: '3.12'
       - run: pip install requests brotli
       - run: python scripts/update_prices.py
+        env:
+          PRICE_FACTOR: '1.25'   # Skinport обычно ~20-30% дешевле Steam; поменяй, если нужно
       - name: Commit prices.json
         run: |
           git config user.name "github-actions"
