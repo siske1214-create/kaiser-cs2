@@ -111,7 +111,7 @@ body.ny :is(main,.modal) button:not(.g):not(.sw){background:linear-gradient(#ff7
 </head><body>
 <svg class="bgmap" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="vg" cx=".5" cy=".45" r=".75"><stop offset=".5" stop-color="#0a0d13" stop-opacity="0"/><stop offset="1" stop-color="#0a0d13" stop-opacity=".92"/></radialGradient></defs><g fill="none" stroke="#9db7ff" stroke-width="2.5" opacity=".13"><path d="M120 150h330v120h140v-60h250v140h200V120h300v200h-90v150h160v320h-420v-130h-200v130H480V600H300v-90H120z"/><path d="M450 270v200h140M840 350h240M1000 120v230M300 510v-130h150M690 600V470h150v130M1190 470v130M1380 320h90"/><rect x="170" y="190" width="140" height="110" rx="6"/><rect x="1130" y="170" width="150" height="120" rx="6"/><rect x="760" y="215" width="90" height="70"/><rect x="560" y="660" width="120" height="90"/><circle cx="250" cy="245" r="48"/><circle cx="1205" cy="230" r="52"/><circle cx="820" cy="520" r="34" stroke-dasharray="8 8"/><path d="M0 450h1600M800 0v900" stroke-dasharray="3 14" opacity=".5"/></g><g fill="#9db7ff" opacity=".18" font-family="sans-serif" font-weight="800" font-size="46" text-anchor="middle"><text x="250" y="262">A</text><text x="1205" y="247">B</text></g><rect width="1600" height="900" fill="url(#vg)"/></svg>
 <header class="top"><div class="logo"><div class="lg">◆</div><div><b>Кейсер</b><small>симулятор кейсов</small><small id="ptm" style="display:block;white-space:nowrap"></small></div></div>
-<nav><button id="t-inv" class="g" onclick="show('inv')">Инвентарь</button><button id="t-cases" class="on" onclick="show('cases')">Кейсы</button><button id="t-up" class="g" onclick="show('up')">Апгрейд</button><button id="t-ct" class="g" onclick="show('ct')">Контракты</button><button id="t-mk" class="g" onclick="show('mk')">Рынок</button><button id="t-bp" class="g" onclick="show('bp')">Battle Pass</button><button id="t-hi" class="g" onclick="show('hi')">История</button><button id="t-ed" class="g" onclick="show('ed')">Редактор</button></nav>
+<nav><button id="t-inv" class="g" onclick="show('inv')">Инвентарь</button><button id="t-cases" class="on" onclick="show('cases')">Кейсы</button><button id="t-up" class="g" onclick="show('up')">Апгрейд</button><button id="t-ct" class="g" onclick="show('ct')">Контракты</button><button id="t-bt" class="g" onclick="show('bt')">Case Battle</button><button id="t-mk" class="g" onclick="show('mk')">Рынок</button><button id="t-bp" class="g" onclick="show('bp')">Battle Pass</button><button id="t-hi" class="g" onclick="show('hi')">История</button><button id="t-ed" class="g" onclick="show('ed')">Редактор</button></nav>
 <div style="justify-self:end;display:flex;gap:10px;align-items:center"><button class="sndb" id="nyB" onclick="setNY(!NYM)" title="Новогодний режим" aria-label="New Year mode">🎄</button><button class="sndb" id="sndB" onclick="sndPanel(event)" title="Звук и музыка" aria-label="Sound">🔊</button><button class="sndb" id="nwB" onclick="openNews()" title="Новости" aria-label="News">📰</button><div class="lang" id="lang" role="group" aria-label="Language"><button id="l-ru" class="on" onclick="setLang('ru')">RU</button><button id="l-en" onclick="setLang('en')">EN</button></div><div class="pts" onclick="show('bp')" title="Поинты Battle Pass">★ <span id="pts">0</span></div><div class="wal" onclick="show('dep')" title="Баланс и настройки"><div class="bal" id="bal"></div><button>+</button></div></div></header>
 <div class="sndp" id="sndP" hidden>
 <div class="sndr"><span>Звуковые эффекты</span><button class="sw" id="sw-fx" onclick="SND.tog('fx')"><i></i></button></div>
@@ -140,6 +140,7 @@ body.ny :is(main,.modal) button:not(.g):not(.sw){background:linear-gradient(#ff7
 <div class="upg2"><div class="upp"><div class="row"><b>Мой инвентарь</b><input id="upBal" type="number" min="0" placeholder="Баланс, $" oninput="upRender()" style="width:110px"><button class="g" onclick="UPS=new Set();$('upBal').value='';upRender()">Сбросить</button></div><div class="grid ups" id="upI"></div></div>
 <div class="upp"><div class="row"><b>Улучшить до</b><select id="upS" onchange="upRender()"><option value="pd">Цена ↓</option><option value="pa">Цена ↑</option></select><input id="upQ" placeholder="Поиск" oninput="upRender()" style="width:110px"><input id="upF" type="number" placeholder="от $" oninput="upRender()" style="width:80px"><input id="upT" type="number" placeholder="до $" oninput="upRender()" style="width:80px"></div><div class="grid ups" id="upM"></div></div></div></section>
 <section id="ct" hidden><h2>Контракт обмена</h2><p class="mu">Выбери 10 предметов одной редкости — получишь один предмет следующей редкости и 10 поинтов.</p><div class="row"><b id="ctN"></b><button id="ctGo" onclick="ctGo()">Обменять</button><button class="g" onclick="CTS=new Set();ctRender()">Сбросить</button></div><div id="ctRes"></div><div class="grid" id="ctI"></div></section>
+<section id="bt" hidden><h2>Case Battle</h2><p class="mu">Открывай одни и те же кейсы против ботов. Выигрывает тот, у кого выпало на большую сумму, и забирает все предметы.</p><div id="btB"></div></section>
 <section id="hi" hidden><div class="row"><h2 style="margin:0">История дропа</h2><button class="g" onclick="G.h=[];save();hiRender()">Очистить</button></div><div id="hiL"></div></section>
 <section id="bp" hidden><h2>Battle Pass</h2><p class="mu">За каждый выпавший предмет из кейса — поинты: чем выше редкость, тем больше. Также поинты дают апгрейд (1 поинт за каждые $5 ставки) и контракты (10 поинтов за контракт). Трать их на скины. Следующий уровень открывается, когда потратишь нужную сумму.</p><div id="bpH"></div><div id="bpL"></div></section>
 <section id="ed" hidden>
@@ -384,8 +385,8 @@ const pool=r==='g'?(k.gold||GOLD):r==='b'?k.b:r==='p'?k.p2:r==='k'?k.k:k.r;
 const n=pool[Math.random()*pool.length|0],nk=NWT.includes(k.cat)||!!(CSK.get(n)&&CSK.get(n).nw),w=nk?0:(f=>f<.07?0:f<.15?1:f<.38?2:f<.45?3:4)(Math.random());
 const st=Math.random()<.1&&r!=='g'&&(!nk||k.cat==='mus');let p=basePrice(n,r,k)*(nk?1:wmul(n,w))*(st?1.5:1);
 return{n:(st?'StatTrak™ ':'')+n,r,w:nk?'':WEARS[w][0],p:+Math.max(p,.01).toFixed(2),k:k.n}}
-function show(t){for(const x of['cases','open','inv','mk','dep','up','ct','hi','bp','ed'])$(x).hidden=x!==t;
-for(const b of['cases','inv','mk','up','ct','hi','bp','ed'])$('t-'+b).className=(b===t||(t==='open'&&b==='cases'))?'on':'g';render();if(t==='mk')mkRender();if(t==='up')upRender();if(t==='ct')ctRender();if(t==='hi')hiRender();if(t==='bp')bpRender();if(t==='ed')edRender()}
+function show(t){for(const x of['cases','open','inv','mk','dep','up','ct','bt','hi','bp','ed'])$(x).hidden=x!==t;
+for(const b of['cases','inv','mk','up','ct','bt','hi','bp','ed'])$('t-'+b).className=(b===t||(t==='open'&&b==='cases'))?'on':'g';render();if(t==='mk')mkRender();if(t==='up')upRender();if(t==='ct')ctRender();if(t==='bt')btRender();if(t==='hi')hiRender();if(t==='bp')bpRender();if(t==='ed')edRender()}
 function render(){$('bal').textContent=fm(G.m);$('pts').textContent=G.bp||0;
 const cc1=k=>`<div class="card cl" style="--c:${k.c}" onclick="caseDetail('${k.id}')"><div class="box">${vis('case:'+k.id,'',k.c,84,1,k,1)}</div><h3>${k.n}</h3><div class="pr">${fm(k.p+KEY)}</div><button onclick="event.stopPropagation();pickCase('${k.id}')">Открыть</button></div>`;$('cl').innerHTML=CATS.map(([t,n])=>{const l=sortCases().filter(k=>(k.cat||'cs')===t);return l.length?`<div class="cath"><h3 class="cat">${n}</h3><button class="g" onclick="togCat('${t}')">${HID(t)?'Показать':'Скрыть'}</button></div>${HID(t)?'':`<div class="grid">${l.map(cc1).join('')}</div>`}`:''}).join('');
 $('il').innerHTML=sortItems(G.inv,$('is2').value).map(i=>`<div class="card cl" style="--c:${RC[i.r][0]}" onclick="skinView('inv',${i.id})"><div class="gimg">${vis(sk(i.n),i.n,RC[i.r][0],60)}</div><div style="font-size:13px;font-weight:600">${i.n}</div><div class="mu">${i.w}</div>${(i.s||[]).length?`<div style="display:flex;gap:2px;justify-content:center">${i.s.map(x=>`<div style="width:26px">${vis(sk(x.n),x.n,RC[x.r][0],22)}</div>`).join('')}</div>`:''}<div class="mu">${RC[i.r][1]}</div><div class="pr">${fm(i.p)}</div>${canStick(i)?`<button class="g" style="margin-bottom:4px" onclick="event.stopPropagation();stkView(${i.id})">Наклейки${(i.s||[]).length?' ('+i.s.length+')':''}</button>`:''}<button onclick="event.stopPropagation();sell(${i.id})">Продать</button></div>`).join('')||'<p class="mu">Пока пусто — открой кейс!</p>';
@@ -475,16 +476,52 @@ const BPD3=[{need:0,sum:6e4,it:[['AK-47 | Fire Serpent','r'],['AWP | Medusa','r'
 let BPCS=null;
 const BPCASH=1; /* сколько $ за 1 поинт при обмене */
 function bpCash(n){n=Math.floor(+n||0);const have=G.bp||0;if(n<1||n>have){alert('Введи число поинтов от 1 до '+have);return}G.bp=have-n;G.m=+(G.m+n*BPCASH).toFixed(2);save();render();bpRender();if(typeof SND!=='undefined'&&SND.coin)SND.coin()}
+const BPBUY=1; /* сколько $ стоит 1 поинт при покупке за деньги */
+function bpBuyPts(n){n=Math.floor(+n||0);const cost=+(n*BPBUY).toFixed(2);if(n<1){alert('Введи число поинтов от 1');return}if(G.m<cost){alert('Недостаточно денег — пополни баланс.');return}G.m=+(G.m-cost).toFixed(2);G.bp=(G.bp||0)+n;save();render();bpRender();if(typeof SND!=='undefined'&&SND.coin)SND.coin()}
 const bpSold=x=>x.r==='g'&&!!(G.bpo||{})[x.n];
 const bpSp=p=>p?((G.bpx||[])[p]||0):(G.bps||0);
 function bpAdd(p,v){if(p){G.bpx=G.bpx||[0,0,0];G.bpx[p]=bpSp(p)+v}else G.bps=(G.bps||0)+v}
-function bpBuild(){BPCS=[BPD,BPD2,BPD3].map(D=>D.map(L=>{const it=L.it.map(([n,r])=>({n,r,p:+basePrice(n,r,{}).toFixed(2)})),sm=it.reduce((a,x)=>a+x.p,0);it.forEach(x=>x.pts=L.fixed?L.fixed:Math.max(1,Math.round(x.p*L.sum/sm)));return{need:L.need,sum:L.sum,it}}))}
+const BP_DIV=2; /* во сколько раз дешевле товары в Battle Pass */
+function bpBuild(){BPCS=[BPD,BPD2,BPD3].map(D=>D.map(L=>{const it=L.it.map(([n,r])=>({n,r,p:+basePrice(n,r,{}).toFixed(2)})),sm=it.reduce((a,x)=>a+x.p,0);it.forEach(x=>x.pts=L.fixed?L.fixed:Math.max(1,Math.round(x.p*L.sum/sm/BP_DIV)));return{need:L.need,sum:Math.round(L.sum/BP_DIV),it}}))}
 const bpDone=p=>{const c=BPCS[p],l=c[c.length-1];return l.it.every(bpSold)};
 const bpOpen=p=>p===0||bpDone(p-1);
 function bpRender(){if(!BPCS)bpBuild();G.bp=G.bp||0;G.bps=G.bps||0;let P=G.bpv||0;if(!bpOpen(P))P=G.bpv=0;const BPC=BPCS[P],sp=bpSp(P),nx=BPC.find(L=>L.need>sp),pct=nx?Math.min(100,sp/nx.need*100):100;
-$('bpH').innerHTML=`<div class="row" style="justify-content:flex-start;gap:6px;margin-bottom:8px">${[0,1,2].map(i=>`<button class="${i===P?'':'g'}" style="width:auto;margin:0" ${bpOpen(i)?'':'disabled title="Купи нож в предыдущем Battle Pass"'} onclick="G.bpv=${i};save();bpRender()">Battle Pass ${i+1}${bpOpen(i)?'':' 🔒'}</button>`).join('')}</div><div class="upp"><div class="row"><b style="font-size:20px">Поинты: <span style="color:#ffd21f">${G.bp}</span></b><span class="mu">Потрачено в этом Battle Pass: ${sp}</span></div><div style="height:10px;border-radius:6px;background:#222b3b;overflow:hidden;margin:8px 0"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#ffd21f,#ff5a1f)"></div></div><div class="mu">${nx?'До следующего уровня: потрать ещё '+(nx.need-sp)+' из '+nx.need+' поинтов':'Все уровни открыты'}</div><div class="mu">Поинты за дроп: армейское ${BPV.b} · запрещённое ${BPV.p} · засекреченное ${BPV.k} · тайное ${BPV.r} · нож/перчатки ${BPV.g}</div><div class="mu">Апгрейд: 1 поинт за каждые $5 ставки · Контракт: ${CTPT} поинтов</div><div class="row" style="margin-top:10px"><input id="bpC" type="number" min="1" step="1" placeholder="Сколько поинтов" style="width:150px"><button onclick="bpCash(+$('bpC').value)">Обменять на деньги</button><button class="g" onclick="bpCash(G.bp)">Всё</button><span class="mu">1 поинт = ${fm(BPCASH)}</span></div></div>`;
+$('bpH').innerHTML=`<div class="row" style="justify-content:flex-start;gap:6px;margin-bottom:8px">${[0,1,2].map(i=>`<button class="${i===P?'':'g'}" style="width:auto;margin:0" ${bpOpen(i)?'':'disabled title="Купи нож в предыдущем Battle Pass"'} onclick="G.bpv=${i};save();bpRender()">Battle Pass ${i+1}${bpOpen(i)?'':' 🔒'}</button>`).join('')}</div><div class="upp"><div class="row"><b style="font-size:20px">Поинты: <span style="color:#ffd21f">${G.bp}</span></b><span class="mu">Потрачено в этом Battle Pass: ${sp}</span></div><div style="height:10px;border-radius:6px;background:#222b3b;overflow:hidden;margin:8px 0"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#ffd21f,#ff5a1f)"></div></div><div class="mu">${nx?'До следующего уровня: потрать ещё '+(nx.need-sp)+' из '+nx.need+' поинтов':'Все уровни открыты'}</div><div class="mu">Поинты за дроп: армейское ${BPV.b} · запрещённое ${BPV.p} · засекреченное ${BPV.k} · тайное ${BPV.r} · нож/перчатки ${BPV.g}</div><div class="mu">Апгрейд: 1 поинт за каждые $5 ставки · Контракт: ${CTPT} поинтов</div><div class="row" style="margin-top:10px"><input id="bpC" type="number" min="1" step="1" placeholder="Сколько поинтов" style="width:150px"><button onclick="bpCash(+$('bpC').value)">Обменять на деньги</button><button class="g" onclick="bpCash(G.bp)">Всё</button><span class="mu">1 поинт = ${fm(BPCASH)}</span></div><div class="row" style="margin-top:8px"><input id="bpD" type="number" min="1" step="1" placeholder="Сколько поинтов купить" style="width:190px"><button onclick="bpBuyPts(+$('bpD').value)">Купить поинты за деньги</button><button class="g" onclick="bpBuyPts(Math.floor(G.m/BPBUY))">Макс.</button><span class="mu">1 поинт = ${fm(BPBUY)}</span></div></div>`;
 $('bpL').innerHTML=BPC.map((L,i)=>{const lock=sp<L.need;return `<div class="upp" style="margin:14px 0;${lock?'opacity:.6':''}"><div class="row"><b style="font-size:18px">Уровень ${i+1}</b><span class="mu">${i?(lock?'🔒 Откроется после траты '+L.need+' поинтов (ещё '+(L.need-sp)+')':'✓ Открыт'):'Открыт'}${L.sum?' · всего товаров на '+L.sum+' поинтов':''}</span></div><div class="grid ups" style="max-height:none">${L.it.map((x,j)=>`<div class="card" style="--c:${RC[x.r][0]};padding:8px;font-size:12px"><div class="gimg">${vis(sk(x.n),x.n,RC[x.r][0],48)}</div><div style="font-weight:600">${x.n}</div><div class="mu">Стоимость: ${fm(x.p)}</div><div style="color:#ffd21f;font-weight:700">${x.pts} поинт.</div><button ${lock||G.bp<x.pts||bpSold(x)?'disabled':''} onclick="bpBuy(${i},${j})">${bpSold(x)?'Куплено ✓':'Купить'}</button></div>`).join('')}</div></div>`}).join('')}
 function bpBuy(i,j){if(!BPCS)bpBuild();const P=G.bpv||0,L=BPCS[P][i],x=L&&L.it[j];if(!bpOpen(P)||!x||bpSp(P)<L.need||(G.bp||0)<x.pts||bpSold(x))return;G.bp-=x.pts;if(x.r==='g'){G.bpo=G.bpo||{};G.bpo[x.n]=1}bpAdd(P,x.pts);const it={n:x.n,r:x.r,w:'После полевых',p:x.p,k:'Battle Pass'+(P?' '+(P+1):''),id:G.uid++};G.inv.push(it);histAdd(it);if(it.p>G.best)G.best=it.p;save();render();bpRender()}
+
+/* ================= Case Battle: бои кейсов против ботов ================= */
+const BT_G={'1v1':[[0],[1]],'1v1v1':[[0],[1],[2]],'1v1v1v1':[[0],[1],[2],[3]],'2v2':[[0,1],[2,3]]};
+const BT_N=['Neo','Viper','Shadow','Ghost','Nova','Rex','Zed','Echo','Blaze','Frost','Raven','Cobra'];
+const BT_TC=['#4fc3f7','#ff9f43','#7ee787','#d68cff'];
+let BT={cases:[],mode:'1v1',inv:0,q:'',run:0,shown:0,tm:0};
+const btCs=()=>BT.cases.map(id=>CASES.find(k=>k.id===id)).filter(Boolean);
+const btCost=()=>+btCs().reduce((a,k)=>a+k.p+KEY,0).toFixed(2);
+function btRender(){const el=$('btB');if(!el)return;if(BT.run){btArena();return}
+el.innerHTML=`<div class="upp"><div class="row" style="gap:8px;justify-content:flex-start;flex-wrap:wrap"><span class="mu">Режим игры</span><select onchange="BT.mode=this.value;btRender()">${Object.keys(BT_G).map(m=>`<option value="${m}" ${BT.mode===m?'selected':''}>${m.split('v').join(' на ')}</option>`).join('')}</select><select onchange="BT.inv=+this.value;btRender()"><option value="0" ${BT.inv?'':'selected'}>Обычный: выигрывает большая сумма</option><option value="1" ${BT.inv?'selected':''}>Инверсия: выигрывает меньшая сумма</option></select></div><div class="row" style="margin-top:10px;gap:8px;justify-content:flex-start;flex-wrap:wrap"><input id="btQ" placeholder="Поиск кейса" value="${esc(BT.q)}" oninput="BT.q=this.value;btOpts()" style="flex:1;min-width:140px"><select id="btS" style="min-width:200px;max-width:100%"></select><button onclick="btAdd()">Добавить кейс</button><button class="g" onclick="btRand()">Случайный кейс</button></div><h3>Кейсы в битве</h3><div id="btL"></div><div class="row" style="margin-top:10px;gap:8px;justify-content:flex-start"><b id="btT"></b><button onclick="btStart()">Начать битву</button><button class="g" onclick="BT.cases=[];btList()">Очистить список</button></div></div>`;btOpts();btList()}
+function btOpts(){const q=BT.q.toLowerCase(),el=$('btS');if(el)el.innerHTML=CASES.filter(k=>k.n.toLowerCase().includes(q)).sort((a,b)=>a.p-b.p).slice(0,200).map(k=>`<option value="${esc(k.id)}">${esc(k.n)} — ${fm(k.p+KEY)}</option>`).join('')}
+function btPush(id){if(BT.cases.length>=10){alert('Максимум 10 раундов.');return}BT.cases.push(id);btList()}
+function btAdd(){const id=$('btS').value;if(id)btPush(id)}
+function btRand(){if(CASES.length)btPush(CASES[Math.random()*CASES.length|0].id)}
+function btList(){const cs=btCs();$('btL').innerHTML=cs.map((k,i)=>`<div class="row" style="justify-content:flex-start;gap:10px;padding:4px 0;border-top:1px solid #ffffff14"><span class="mu" style="width:22px">${i+1}.</span><span style="flex:1">${esc(k.n)}</span><span class="pr">${fm(k.p+KEY)}</span><button class="g" style="padding:2px 10px" onclick="BT.cases.splice(${i},1);btList()">×</button></div>`).join('')||'<p class="mu">Добавь хотя бы один кейс (до 10 раундов).</p>';$('btT').textContent='Раундов: '+cs.length+' · К оплате: '+fm(btCost())}
+function btStart(){if(BT.run)return;const cs=btCs();if(!cs.length){alert('Добавь хотя бы один кейс (до 10 раундов).');return}
+const cost=btCost();if(G.m<cost){alert('Недостаточно денег — пополни баланс.');return}
+const groups=BT_G[BT.mode],n=groups.flat().length,names=['Вы',...[...BT_N].sort(()=>Math.random()-.5).slice(0,n-1)];
+const rounds=cs.map(k=>names.map(()=>pick(k))),tot=names.map((_,p)=>rounds.reduce((a,r)=>a+r[p].p,0)),gT=groups.map(g=>g.reduce((a,p)=>a+tot[p],0));
+const best=BT.inv?Math.min(...gT):Math.max(...gT),ws=gT.map((v,i)=>Math.abs(v-best)<1e-9?i:-1).filter(i=>i>=0),wg=ws[Math.random()*ws.length|0];
+const win=rounds.flat().sort((a,b)=>b.p-a.p),got=names.map(()=>[]);win.forEach((x,i)=>got[groups[wg][i%groups[wg].length]].push(x));
+const mineV=+got[0].reduce((a,x)=>a+x.p,0).toFixed(2),prize=+win.reduce((a,x)=>a+x.p,0).toFixed(2);
+G.m=+(G.m-cost).toFixed(2);G.sp+=cost;G.o+=cs.length;
+got[0].forEach(x=>{const it={...x,id:G.uid++};G.inv.push(it);histAdd(it);G.bp=(G.bp||0)+BPV[x.r];if(x.p>G.best)G.best=x.p});
+save();$('bal').textContent=fm(G.m);
+BT={...BT,run:1,shown:0,fin:0,names,groups,rounds,wg,mineV,prize,cost,cs:cs.map(k=>k.n)};btRender();btStep()}
+function btStep(){clearTimeout(BT.tm);BT.tm=setTimeout(()=>{BT.shown++;btArena();const r=BT.rounds[BT.shown-1];try{if(typeof SND!=='undefined'&&SND.reveal)SND.reveal([r.reduce((a,x)=>x.p>a.p?x:a,r[0])])}catch(e){}if(BT.shown<BT.rounds.length)btStep();else BT.tm=setTimeout(btEnd,900)},1100)}
+function btSkip(){clearTimeout(BT.tm);BT.shown=BT.rounds.length;btEnd()}
+function btEnd(){clearTimeout(BT.tm);BT.fin=1;render();btArena()}
+function btArena(){const el=$('btB'),B=BT;if(!el||!B.run)return;const teams=B.groups.length<B.names.length,teamOf=p=>B.groups.findIndex(g=>g.includes(p)),sub=p=>B.rounds.slice(0,B.shown).reduce((a,r)=>a+r[p].p,0);
+let h=`<div class="upp"><div class="row"><b>${B.fin?'Битва окончена':'Раунд '+Math.max(1,B.shown)+' / '+B.rounds.length}</b>${B.fin?'':'<button class="g" onclick="btSkip()">Пропустить</button>'}</div><div class="mu">${B.cs.map(esc).join(' · ')}</div></div><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:10px">${B.names.map((nm,p)=>{const t=teamOf(p),w=B.fin&&t===B.wg;return `<div class="card" style="--c:${w?'#ffd21f':BT_TC[t]};padding:8px;font-size:12px;${w?'box-shadow:0 0 18px #ffd21f88':''}"><b>${esc(nm)}${w?' 🏆':''}</b>${teams?'<div class="mu">Команда '+(t+1)+'</div>':''}<div class="pr">Итого ${fm(sub(p))}</div>${B.rounds.slice(0,B.shown).map(r=>{const x=r[p];return `<div style="margin-top:6px;border-top:1px solid #ffffff14;padding-top:4px"><div class="gimg" style="max-width:110px;margin:auto">${vis(sk(x.n),x.n,RC[x.r][0],36)}</div>${esc(x.n)}<div class="pr">${fm(x.p)}</div></div>`}).join('')}</div>`}).join('')}</div>`;
+if(B.fin){const won=B.wg===teamOf(0),net=+(B.mineV-B.cost).toFixed(2);h+=`<div class="upp" style="margin-top:10px;text-align:center"><h2 style="margin:0 0 6px">${won?'🏆 Победа!':'Поражение'}</h2><div>${won?'Ты забрал предметов на '+fm(B.mineV)+'. Предметы добавлены в инвентарь.':'Победитель: '+B.groups[B.wg].map(p=>B.names[p]).join(' + ')+' · приз '+fm(B.prize)}</div><div class="mu">Потрачено ${fm(B.cost)} · Чистая прибыль: <b style="color:${net>=0?'#7ee787':'#ff6b6b'}">${net>=0?'+':'−'}${fm(Math.abs(net))}</b></div><div class="row" style="justify-content:center;margin-top:10px"><button onclick="BT.run=0;btRender()">Новая битва</button><button class="g" onclick="show('inv')">В инвентарь</button></div></div>`}
+el.innerHTML=h}
 
 /* ================= Редактор: свои скины и кейсы ================= */
 const RN=['b','p','k','r','g'];
@@ -1274,6 +1311,49 @@ EN_P.push(...[["Новогодний режим", "New Year mode"], ["Новос
 ].forEach(p=>{if(!EN_P.some(q=>q[0]===p[0]))EN_P.push(p)});/* перевод новости */[
 ["❄ Зимние кейсы, цветные кейсы и новые Battle Pass","❄ Winter cases, color cases and new Battle Passes"],
 ["Добавлены три зимних кейса: чем выше номер, тем дороже кейс и лучше награды. Появились цветные кейсы — синий, фиолетовый, розовый, красный и золотой: из каждого выпадают только скины своего цвета. Второй и третий Battle Pass открываются после покупки ножа в предыдущем. Кейсы «Досье агентов» стали дороже: их цена теперь считается по ценам агентов.","Three winter cases added: the higher the number, the pricier the case and the better the rewards. Color cases have arrived — blue, purple, pink, red and gold: each one drops only skins of its own color. The second and third Battle Pass unlock after you buy the knife in the previous one. Agent Dossier cases are now pricier: their price is now based on agent prices."]
+].forEach(p=>{if(!EN_P.some(q=>q[0]===p[0]))EN_P.push(p)});/* переводы: Case Battle */[
+["⚔ Новый режим: Case Battle","⚔ New mode: Case Battle"],
+["Добавлен режим Case Battle: собери набор кейсов, выбери режим (1 на 1, 1 на 1 на 1, 1 на 1 на 1 на 1 или 2 на 2) и открывай их против ботов. Выигрывает тот, у кого выпало на большую сумму, и забирает все предметы. Есть и режим «Инверсия», где побеждает меньшая сумма.","Case Battle mode added: build a set of cases, pick a mode (1 vs 1, 1 vs 1 vs 1, 1 vs 1 vs 1 vs 1 or 2 vs 2) and open them against bots. Whoever drops items worth more wins and takes all the items. There is also an “Inverted” mode where the lower total wins."],
+["Открывай одни и те же кейсы против ботов. Выигрывает тот, у кого выпало на большую сумму, и забирает все предметы.","Open the same cases against bots. Whoever drops items worth more wins and takes all the items."],
+["Режим игры","Game mode"],
+["1 на 1","1 vs 1"],
+["1 на 1 на 1","1 vs 1 vs 1"],
+["1 на 1 на 1 на 1","1 vs 1 vs 1 vs 1"],
+["2 на 2","2 vs 2"],
+["Обычный: выигрывает большая сумма","Normal: the higher total wins"],
+["Инверсия: выигрывает меньшая сумма","Inverted: the lower total wins"],
+["Поиск кейса","Search cases"],
+["Добавить кейс","Add case"],
+["Случайный кейс","Random case"],
+["Очистить список","Clear list"],
+["Кейсы в битве","Cases in the battle"],
+["Добавь хотя бы один кейс (до 10 раундов).","Add at least one case (up to 10 rounds)."],
+["Максимум 10 раундов.","Maximum 10 rounds."],
+["Начать битву","Start battle"],
+["Раундов:","Rounds:"],
+["К оплате:","To pay:"],
+["Вы","You"],
+["Итого","Total"],
+["Команда","Team"],
+["Битва окончена","Battle over"],
+["Пропустить","Skip"],
+["Победа!","Victory!"],
+["Поражение","Defeat"],
+["Ты забрал предметов на","You took items worth"],
+["Предметы добавлены в инвентарь.","Items were added to your inventory."],
+["Победитель:","Winner:"],
+["приз","prize"],
+["Потрачено","Spent"],
+["Чистая прибыль:","Net profit:"],
+["Новая битва","New battle"],
+["В инвентарь","To inventory"]
+].forEach(p=>{if(!EN_P.some(q=>q[0]===p[0]))EN_P.push(p)});EN_R.push([/Раунд (\d+) \/ (\d+)/g,(m,a,b)=>'Round '+a+' / '+b]);/* переводы: поинты и новость */[
+["★ Battle Pass: дешевле и с обменом денег на поинты","★ Battle Pass: cheaper, and money can be exchanged for points"],
+["В Battle Pass все скины стали в 2 раза дешевле: то, что стоило 30 поинтов, теперь стоит 15. Кроме того, поинты теперь можно покупать за деньги: 1 поинт = $1, так же как и обмен поинтов на деньги.","All skins in the Battle Pass are now 2 times cheaper: what used to cost 30 points now costs 15. You can also buy points with money: 1 point = $1, the same as exchanging points for money."],
+["Сколько поинтов купить","How many points to buy"],
+["Купить поинты за деньги","Buy points with money"],
+["Макс.","Max"],
+["Введи число поинтов от 1","Enter a number of points from 1"]
 ].forEach(p=>{if(!EN_P.some(q=>q[0]===p[0]))EN_P.push(p)});EN_R.push([/Цены обновятся через ([\d:]+)/g,(m,a)=>'Prices update in '+a]);const EN_M=new Map(EN_P);
 const EN_RE=new RegExp('(?<![А-Яа-яЁё])(?:'+EN_P.map(p=>p[0]).sort((a,b)=>b.length-a.length).map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?![А-Яа-яЁё])','g');
 const CY=/[А-Яа-яЁё]/;
@@ -1407,6 +1487,8 @@ SND.ui();
 /* ================= Новости и награды ================= */
 /* Чтобы добавить новость — допиши объект в начало массива NEWS (id должен быть уникальным) */
 const NEWS=[
+{id:'upd6',d:'20.11.2026',t:'★ Battle Pass: дешевле и с обменом денег на поинты',b:'В Battle Pass все скины стали в 2 раза дешевле: то, что стоило 30 поинтов, теперь стоит 15. Кроме того, поинты теперь можно покупать за деньги: 1 поинт = $1, так же как и обмен поинтов на деньги.'},
+{id:'upd5',d:'19.11.2026',t:'⚔ Новый режим: Case Battle',b:'Добавлен режим Case Battle: собери набор кейсов, выбери режим (1 на 1, 1 на 1 на 1, 1 на 1 на 1 на 1 или 2 на 2) и открывай их против ботов. Выигрывает тот, у кого выпало на большую сумму, и забирает все предметы. Есть и режим «Инверсия», где побеждает меньшая сумма.'},
 {id:'upd4',d:'19.11.2026',t:'❄ Зимние кейсы, цветные кейсы и новые Battle Pass',b:'Добавлены три зимних кейса: чем выше номер, тем дороже кейс и лучше награды. Появились цветные кейсы — синий, фиолетовый, розовый, красный и золотой: из каждого выпадают только скины своего цвета. Второй и третий Battle Pass открываются после покупки ножа в предыдущем. Кейсы «Досье агентов» стали дороже: их цена теперь считается по ценам агентов.'},
 {id:'upd3',d:'19.11.2026',t:'💲 Цены исправлены',b:'Цены предметов теперь близки к ценам Steam Market и обновляются раз в день: таймер до следующего обновления показан рядом с названием игры. У скинов появились настоящие цены для каждого износа, а дорогие наклейки (Katowice 2014 и другие) стоят примерно как в CS2. На рынке теперь показывается по 300 предметов за раз.'},
 {id:'upd2',d:'18.11.2026',t:'🏷 Наклейки, свои цены и Battle Pass',b:'Наклейки из CS2: новые капсулы по турнирам. Наклеивай их на оружие — цена скина растёт, а в апгрейдах считается вместе с наклейками. Цены дорогих наклеек (Katowice 2014 и другие старые турниры) стали ближе к настоящим, а любую цену можно поменять самому: Редактор → Цены. В своих кейсах ножи и перчатки теперь скрыты, пока не включишь их показ в редакторе. Battle Pass: нож в конце можно купить только один раз, а поинты теперь можно обменять на деньги 1 к 1.'},
